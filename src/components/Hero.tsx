@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { usePortfolio } from '../context/PortfolioContext';
 import {
   FileText,
@@ -24,6 +24,10 @@ export const Hero: React.FC<HeroProps> = ({ onOpenCvModal }) => {
 
   const formattedPhotoUrl = formatDirectImageUrl(profile.profilePhoto || '');
   const hasValidPhoto = Boolean(formattedPhotoUrl && !imgFailed);
+
+  useEffect(() => {
+    setImgFailed(false);
+  }, [formattedPhotoUrl]);
 
   const snapshotPillars = [
     {
@@ -117,7 +121,14 @@ export const Hero: React.FC<HeroProps> = ({ onOpenCvModal }) => {
                         alt="Abiodun Ayodeji - Data Analyst"
                         className="w-full h-full object-cover object-top"
                         referrerPolicy="no-referrer"
-                        onError={() => setImgFailed(true)}
+                        onError={(e) => {
+                          const target = e.currentTarget;
+                          if (!target.src.includes('googleusercontent.com')) {
+                            target.src = 'https://lh3.googleusercontent.com/d/1LNHQaePi0LPjkbSXdoq7INdo0W7bMT5D';
+                          } else {
+                            setImgFailed(true);
+                          }
+                        }}
                       />
                       {/* Direct update button on hover */}
                       <button

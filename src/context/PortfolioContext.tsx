@@ -15,17 +15,19 @@ import {
 import { defaultPortfolioData } from '../data/defaultProfile';
 import confetti from 'canvas-confetti';
 
-const STORAGE_LIVE_KEY = 'abiodun_portfolio_live_v3';
-const STORAGE_DRAFT_KEY = 'abiodun_portfolio_draft_v3';
-const STORAGE_AUTH_KEY = 'abiodun_portfolio_admin_auth_v3';
+const STORAGE_LIVE_KEY = 'abiodun_portfolio_live_v4';
+const STORAGE_DRAFT_KEY = 'abiodun_portfolio_draft_v4';
+const STORAGE_AUTH_KEY = 'abiodun_portfolio_admin_auth_v4';
 
 export const sanitizePortfolioData = (data: Partial<PortfolioData> | null | undefined): PortfolioData => {
   if (!data || typeof data !== 'object') return defaultPortfolioData;
 
   const rawPhoto = data.profile?.profilePhoto || '';
   const cleanPhoto =
-    rawPhoto.includes('abiodun_ayodeji_portrait') || rawPhoto.includes('profile_photo.jpg')
-      ? ''
+    !rawPhoto ||
+    rawPhoto.includes('abiodun_ayodeji_portrait') ||
+    rawPhoto.includes('profile_photo.jpg')
+      ? '/abiodun_ayodeji.png'
       : rawPhoto;
 
   const rawPhone = data.profile?.phone || '';

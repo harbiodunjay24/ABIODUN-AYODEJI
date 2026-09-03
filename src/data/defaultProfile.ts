@@ -13,7 +13,7 @@ export const defaultPortfolioData: PortfolioData = {
       'Specializing in SQL, Power BI, Advanced Excel, and variance modeling, Abiodun focuses on building automated reporting systems that eliminate data latency, uncover hidden churn risks, and provide executives with real-time operational clarity. He is highly proficient across Google Workspace (Docs, Sheets, Slides, Drive) and Google Apps Script for automated spreadsheet pipelines. He also leverages modern AI tools including ChatGPT, Claude, Google AI Studio, Gemini, and Notion for research synthesis and documentation, maintaining all analytical code repositories on GitHub.',
       'Beyond corporate analytics, Abiodun is deeply dedicated to social impact. He serves as both an Analyst and a Psychologist for GamblePause Africa—an initiative currently operating across 3 countries and expanding—conducting empirical research on youth gambling behavior while offering direct counseling to clients. He also serves as the Data Team Lead and Career Team Lead for the NOUN Cowrywise Ambassador community, where he spearheaded a 4-day career bootcamp for over 200 participants.',
     ],
-    profilePhoto: '',
+    profilePhoto: '/abiodun_ayodeji.png',
     location: 'Lagos, Nigeria',
     email: 'ayodejiharbiodun24@gmail.com',
     phone: '07054195682',
