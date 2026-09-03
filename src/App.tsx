@@ -34,7 +34,7 @@ const PortfolioAppContent: React.FC = () => {
 
   // Otherwise render the public portfolio experience
   return (
-    <div className="min-h-screen bg-zinc-950 text-zinc-100 selection:bg-emerald-500/30 selection:text-emerald-300 font-sans">
+    <div className="min-h-screen bg-white text-zinc-900 selection:bg-zinc-200 selection:text-zinc-900 font-sans">
       
       {/* Top Navigation */}
       <Navbar

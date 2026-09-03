@@ -25,6 +25,8 @@ export interface ProfileData {
     value: string;
     subtext: string;
   }[];
+  linkedinUrl?: string;
+  phoneRaw?: string;
 }
 
 export interface ExperienceItem {
@@ -43,20 +45,32 @@ export interface ExperienceItem {
     metric: string;
     context: string;
   };
+  technologies?: string[];
+  role?: string;
+  company?: string;
+  period?: string;
+  description?: string;
 }
 
 export interface ProjectItem {
   id: string;
   title: string;
-  shortDescription: string;
-  category: 'Business Intelligence' | 'Data Analytics' | 'Research & Social Impact' | 'Automation';
+  shortDescription?: string;
+  description?: string;
+  challenge?: string;
+  solution?: string;
+  impact?: string;
+  summary?: string;
+  context?: string;
+  category: 'Business Intelligence' | 'Data Analytics' | 'Research & Social Impact' | 'Automation' | 'Performance & Planning';
   tools: string[];
-  featured: boolean;
-  businessProblem: string;
-  approach: string;
-  insights: string[];
-  outcome: string;
+  featured?: boolean;
+  businessProblem?: string;
+  approach?: string;
+  insights?: string[];
+  outcome?: string;
   liveUrl?: string;
+  demoUrl?: string;
   githubUrl?: string;
   thumbnailUrl?: string;
   keyMetric?: {
@@ -79,11 +93,16 @@ export interface SkillItem {
 
 export interface CertificationItem {
   id: string;
-  title: string;
-  issuingOrganisation: string;
-  issueYear: string;
+  title?: string;
+  name?: string;
+  issuingOrganisation?: string;
+  issuer?: string;
+  issueYear?: string;
+  issueDate?: string;
   credentialUrl?: string;
-  skillsTagged: string[];
+  credentialId?: string;
+  description?: string;
+  skillsTagged?: string[];
 }
 
 export interface EducationItem {
@@ -104,18 +123,21 @@ export interface VolunteeringImpactItem {
   role: string;
   dates: string;
   description: string;
-  impactStats: {
+  organization?: string;
+  period?: string;
+  achievements?: string[];
+  impactStats?: {
     value: string;
     label: string;
     detail: string;
   }[];
-  researchPipeline: {
+  researchPipeline?: {
     step: string;
     title: string;
     description: string;
   }[];
-  researchFindings: string[];
-  links: {
+  researchFindings?: string[];
+  links?: {
     label: string;
     url: string;
   }[];
@@ -147,10 +169,14 @@ export interface DocumentItem {
   description: string;
   isPublic: boolean;
   isFeatured: boolean;
-  source: 'Google Drive' | 'Direct Upload' | 'Manual Link';
+  source: 'Google Drive' | 'Direct Upload' | 'Manual Link' | 'Uploaded PDF' | 'Verified Credential' | 'Portfolio Staging' | 'Research Publication' | 'Internal Report' | 'Admin Upload' | 'Manual Entry';
   externalUrl?: string;
+  fileUrl?: string;
+  size?: string;
+  format?: string;
+  content?: string;
   currentVersion: string;
-  lastUpdated: string;
+  lastUpdated?: string;
   versionHistory: DocumentVersion[];
   fileSize?: string;
   fileType?: string;
@@ -158,25 +184,20 @@ export interface DocumentItem {
 
 export interface CoverLetterItem {
   id: string;
-  title: string;
-  targetTrack: 'Data Analyst' | 'Business Intelligence' | 'Performance Analyst' | 'General Professional';
-  description: string;
+  targetRole: string;
+  companyName: string;
+  generatedDate: string;
   content: string;
-  status: 'published' | 'draft';
-  isPublic: boolean;
-  lastUpdated: string;
+  tone: 'Executive' | 'Analytical' | 'Innovative';
+  coreSkillsHighlighted: string[];
+  lastUpdated?: string;
 }
 
 export interface WebsiteSettings {
-  siteTitle: string;
-  professionalHeadline: string;
-  accentColor: 'emerald' | 'cyan' | 'blue' | 'amber' | 'indigo';
-  availabilityStatus: string;
-  seoDescription: string;
-  contactEmail: string;
-  contactPhone: string;
-  openGraphImage?: string;
-  favicon?: string;
+  showAvailabilityBadge: boolean;
+  enableAiAssistant: boolean;
+  enableInteractiveCalculators: boolean;
+  maintenanceMode: boolean;
 }
 
 export interface PortfolioData {
@@ -190,12 +211,5 @@ export interface PortfolioData {
   documents: DocumentItem[];
   coverLetters: CoverLetterItem[];
   settings: WebsiteSettings;
-  lastUpdated: string;
-}
-
-export interface ChatMessage {
-  id: string;
-  role: 'user' | 'assistant';
-  content: string;
-  timestamp: string;
+  lastUpdated?: string;
 }

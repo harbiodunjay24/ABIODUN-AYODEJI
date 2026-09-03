@@ -20,7 +20,7 @@ export const AdminAuthModal: React.FC<AdminAuthModalProps> = ({ isOpen, onClose 
   const { loginAdmin, setActiveView } = usePortfolio();
 
   const [email, setEmail] = useState('ayodejiharbiodun24@gmail.com');
-  const [pinOrPass, setPinOrPass] = useState('');
+  const [pinOrPass, setPinOrPass] = useState('2026');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -61,85 +61,85 @@ export const AdminAuthModal: React.FC<AdminAuthModalProps> = ({ isOpen, onClose 
   return (
     <div
       id="admin-auth-backdrop"
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-in fade-in-50"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs animate-in fade-in duration-150"
       onClick={onClose}
     >
       <div
         id="admin-auth-container"
         onClick={(e) => e.stopPropagation()}
-        className="relative w-full max-w-md bg-[#08090c] border border-zinc-800 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-6"
+        className="relative w-full max-w-md bg-white border border-zinc-200 rounded-xl p-6 sm:p-8 shadow-xl space-y-5"
       >
         {/* Header */}
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
-              <Lock className="w-5 h-5" />
+            <div className="w-9 h-9 rounded-lg bg-zinc-100 border border-zinc-200 flex items-center justify-center text-zinc-800">
+              <Lock className="w-4 h-4" />
             </div>
             <div>
-              <div className="text-[10px] font-mono text-emerald-400 uppercase tracking-widest">
-                PRIVATE ACCESS
-              </div>
-              <h3 className="font-display text-lg font-bold text-white tracking-tight">
-                ADMINISTRATOR PORTAL
+              <span className="text-[11px] font-semibold text-zinc-500 uppercase tracking-wider block">
+                ADMINISTRATOR ACCESS
+              </span>
+              <h3 className="text-base font-semibold text-zinc-900">
+                Sign in to Admin Panel
               </h3>
             </div>
           </div>
 
           <button
             onClick={onClose}
-            className="p-2 rounded-xl text-zinc-400 hover:text-white hover:bg-zinc-900 border border-zinc-800 transition-colors"
+            className="p-1.5 rounded-md text-zinc-400 hover:text-zinc-700 hover:bg-zinc-100 transition-colors"
           >
             <X className="w-4 h-4" />
           </button>
         </div>
 
         {/* Security Note */}
-        <div className="p-4 rounded-2xl bg-[#0d0f14] border border-zinc-800/80 text-xs text-zinc-400 flex items-start gap-3">
-          <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
-          <div className="leading-relaxed font-sans">
-            Restricted to owner <strong>Abiodun Ayodeji</strong> to update live case studies, credentials, and curriculum records without editing source code.
+        <div className="p-3.5 rounded-lg bg-[#FAFAFA] border border-zinc-200 text-xs text-zinc-600 flex items-start gap-2.5">
+          <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+          <div className="leading-relaxed">
+            Welcome Abiodun. In this portal you can upload documents, update your CV or resume, change your photo, and manage live portfolio data.
           </div>
         </div>
 
         {error && (
-          <div className="p-3.5 rounded-xl bg-rose-950/40 border border-rose-500/30 text-rose-300 text-xs flex items-center gap-2 font-mono">
+          <div className="p-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-xs flex items-center gap-2">
             <AlertCircle className="w-4 h-4 shrink-0" />
             <span>{error}</span>
           </div>
         )}
 
         {/* Form */}
-        <form onSubmit={handleLogin} className="space-y-4">
+        <form onSubmit={handleLogin} className="space-y-4 text-xs sm:text-sm">
           <div>
-            <label className="block text-xs font-mono text-zinc-400 uppercase tracking-wider mb-1.5">
-              ADMINISTRATOR EMAIL
+            <label className="block text-xs font-medium text-zinc-700 mb-1">
+              Administrator Email
             </label>
             <div className="relative">
-              <Mail className="w-4 h-4 text-zinc-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
+              <Mail className="w-4 h-4 text-zinc-400 absolute left-3 top-1/2 -translate-y-1/2" />
               <input
                 type="email"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="ayodejiharbiodun24@gmail.com"
-                className="w-full bg-zinc-950 border border-zinc-800 rounded-xl pl-10 pr-4 py-3 text-xs text-zinc-100 placeholder-zinc-500 focus:outline-none focus:border-emerald-500 font-mono"
+                className="w-full bg-[#FAFAFA] border border-zinc-300 rounded-md pl-9 pr-3 py-2 text-xs sm:text-sm text-zinc-900 focus:outline-none focus:border-zinc-500 focus:bg-white"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-mono text-zinc-400 uppercase tracking-wider mb-1.5">
-              SECURITY PIN OR KEY
+            <label className="block text-xs font-medium text-zinc-700 mb-1">
+              Security PIN or Password
             </label>
             <div className="relative">
-              <KeyRound className="w-4 h-4 text-zinc-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
+              <KeyRound className="w-4 h-4 text-zinc-400 absolute left-3 top-1/2 -translate-y-1/2" />
               <input
                 type="password"
                 required
                 value={pinOrPass}
                 onChange={(e) => setPinOrPass(e.target.value)}
-                placeholder="Enter PIN (e.g. 2026)"
-                className="w-full bg-zinc-950 border border-zinc-800 rounded-xl pl-10 pr-4 py-3 text-xs text-zinc-100 placeholder-zinc-500 focus:outline-none focus:border-emerald-500 font-mono"
+                placeholder="Enter PIN (Default: 2026)"
+                className="w-full bg-[#FAFAFA] border border-zinc-300 rounded-md pl-9 pr-3 py-2 text-xs sm:text-sm text-zinc-900 focus:outline-none focus:border-zinc-500 focus:bg-white"
               />
             </div>
           </div>
@@ -148,30 +148,25 @@ export const AdminAuthModal: React.FC<AdminAuthModalProps> = ({ isOpen, onClose 
             id="btn-admin-login-submit"
             type="submit"
             disabled={loading}
-            className="w-full bg-emerald-500 hover:bg-emerald-400 disabled:bg-zinc-800 text-zinc-950 disabled:text-zinc-500 py-3 rounded-xl text-xs font-mono font-bold flex items-center justify-center gap-2 transition-colors shadow-sm"
+            className="w-full bg-zinc-900 hover:bg-black disabled:bg-zinc-300 text-white py-2.5 rounded-md text-xs font-medium flex items-center justify-center gap-2 transition-colors shadow-xs"
           >
-            <span>{loading ? 'AUTHENTICATING...' : 'AUTHENTICATE & ENTER'}</span>
+            <span>{loading ? 'Authenticating...' : 'Sign In to Dashboard'}</span>
             <ArrowRight className="w-4 h-4" />
           </button>
         </form>
 
-        {/* Quick Owner One-Click Demo Access Helper */}
-        <div className="pt-4 border-t border-zinc-900 flex flex-col gap-2 text-center">
+        {/* Quick Demo Access Button */}
+        <div className="pt-3 border-t border-zinc-200 flex flex-col gap-2 text-center">
           <button
             type="button"
             onClick={handleQuickDemoAccess}
-            className="text-xs font-mono text-emerald-400 hover:text-emerald-300 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/20 py-2.5 rounded-xl transition-colors font-bold flex items-center justify-center gap-2"
+            className="text-xs text-zinc-800 hover:text-black bg-zinc-100 hover:bg-zinc-200 border border-zinc-200 py-2 rounded-md transition-colors font-medium flex items-center justify-center gap-2"
           >
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>ONE-CLICK OWNER ACCESS (DEMO MODE)</span>
+            <Sparkles className="w-3.5 h-3.5 text-zinc-600" />
+            <span>One-Click Sign In (PIN: 2026)</span>
           </button>
-          <span className="text-[10px] font-mono text-zinc-400">
-            AUTHORIZED PIN: <code className="text-zinc-300 bg-zinc-950 px-1.5 py-0.5 rounded border border-zinc-800">2026</code>
-          </span>
         </div>
-
       </div>
     </div>
   );
 };
-

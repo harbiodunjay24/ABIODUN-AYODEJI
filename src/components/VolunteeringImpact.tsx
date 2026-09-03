@@ -1,170 +1,101 @@
 import React from 'react';
 import { usePortfolio } from '../context/PortfolioContext';
-import {
-  HeartHandshake,
-  Users,
-  AlertTriangle,
-  GraduationCap,
-  ArrowRight,
-  ExternalLink,
-  BookOpen,
-  Sparkles,
-} from 'lucide-react';
+import { Users, BookOpen, Globe, HeartHandshake } from 'lucide-react';
 
 export const VolunteeringImpact: React.FC = () => {
   const { data } = usePortfolio();
-  const vol = data.volunteering[0];
-
-  if (!vol) return null;
+  const { volunteering } = data;
 
   return (
-    <section id="impact" className="py-24 relative bg-[#08090c] border-t border-zinc-900">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
-        {/* Section Tag */}
-        <div className="flex items-center gap-3 text-xs font-mono text-zinc-400 uppercase tracking-widest mb-6">
-          <span className="w-2 h-2 rounded-full bg-emerald-400" />
-          <span>DATA WITH PURPOSE</span>
-          <span className="text-zinc-600">//</span>
-          <span className="text-zinc-400">05</span>
-        </div>
+    <section id="impact" className="py-20 bg-[#FAFAFA] border-b border-zinc-200">
+      <div className="max-w-6xl mx-auto px-6 sm:px-8">
+        {/* Section Label */}
+        <span className="text-xs font-semibold uppercase tracking-wider text-zinc-500 mb-2 block">
+          COMMUNITY & IMPACT
+        </span>
 
         {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
-          <div>
-            <h2 className="font-display text-4xl sm:text-5xl font-extrabold text-white tracking-tight">
-              SOCIAL IMPACT & RESEARCH
-            </h2>
-            <p className="text-zinc-400 text-sm sm:text-base max-w-2xl mt-2 font-normal">
-              Empirical statistical research investigating youth behaviours to drive real-world institutional policy and community advocacy.
-            </p>
-          </div>
-
-          {vol.links?.[0] && (
-            <a
-              href={vol.links[0].url}
-              target="_blank"
-              rel="noreferrer"
-              className="bg-[#0d0f14] hover:bg-zinc-900 text-zinc-300 border border-zinc-800 px-4 py-2.5 rounded-xl text-xs font-mono inline-flex items-center gap-2 transition-colors self-start md:self-auto"
-            >
-              <span>GAMBLE PAUSE INITIATIVE</span>
-              <ExternalLink className="w-3.5 h-3.5 text-zinc-400" />
-            </a>
-          )}
+        <div className="mb-12">
+          <h2 className="text-3xl sm:text-4xl font-semibold tracking-tight text-zinc-900">
+            Beyond Work
+          </h2>
+          <p className="text-sm sm:text-base text-zinc-600 mt-2 max-w-xl">
+            Community initiatives, psychological counseling, and empirical research across Africa.
+          </p>
         </div>
 
-        {/* Big Narrative & Metrics Card */}
-        <div className="bg-[#0d0f14] border border-zinc-800 rounded-3xl p-8 sm:p-10 shadow-2xl space-y-10">
-          
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start pb-8 border-b border-zinc-900">
-            <div className="lg:col-span-8 space-y-3">
-              <div className="text-xs font-mono text-emerald-400 uppercase tracking-wider">
-                {vol.organisation} — {vol.role}
-              </div>
-              <h3 className="font-display text-2xl sm:text-3xl font-bold text-white tracking-tight">
-                Statistical Investigation into Campus Gambling & Academic Outcomes
-              </h3>
-              <p className="text-zinc-400 text-sm sm:text-base leading-relaxed pt-2 font-sans">
-                {vol.description}
-              </p>
-            </div>
+        {/* Initiatives Grid */}
+        <div className="space-y-8">
+          {(volunteering || []).map((item) => {
+            const orgName = item.organisation || (item as any).organization || 'Community Initiative';
+            const roleTitle = item.role || 'Volunteer';
+            const dates = item.dates || (item as any).period || '';
+            const findings = (item as any).achievements || item.researchFindings || [];
+            const impactStats = item.impactStats || [];
 
-            <div className="lg:col-span-4 bg-zinc-950 border border-zinc-800/80 rounded-2xl p-5 space-y-2">
-              <span className="text-[10px] font-mono text-zinc-400 uppercase tracking-wider">
-                RESEARCH TIMEFRAME
-              </span>
-              <div className="text-sm font-bold text-white font-mono">
-                {vol.dates}
-              </div>
-              <p className="text-xs text-zinc-400 font-sans leading-relaxed">
-                Quantitative sampling across tertiary institutions in South-West Nigeria.
-              </p>
-            </div>
-          </div>
-
-          {/* 3 Hard Data Metrics */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            
-            <div className="bg-zinc-950 border border-zinc-800 rounded-2xl p-6 space-y-2">
-              <div className="text-4xl font-extrabold font-mono text-emerald-400">
-                420
-              </div>
-              <h4 className="text-sm font-bold text-white">Sample Population</h4>
-              <p className="text-xs text-zinc-400 font-sans leading-relaxed">
-                Multi-variable dataset sampled and sanitized across tertiary undergraduate cohorts.
-              </p>
-            </div>
-
-            <div className="bg-zinc-950 border border-zinc-800 rounded-2xl p-6 space-y-2">
-              <div className="text-4xl font-extrabold font-mono text-amber-400">
-                71.1%
-              </div>
-              <h4 className="text-sm font-bold text-white">Student Participation Identified</h4>
-              <p className="text-xs text-zinc-400 font-sans leading-relaxed">
-                Documented active engagement in sports wagering and digital betting platforms.
-              </p>
-            </div>
-
-            <div className="bg-zinc-950 border border-zinc-800 rounded-2xl p-6 space-y-2">
-              <div className="text-4xl font-extrabold font-mono text-rose-400">
-                40.6%
-              </div>
-              <h4 className="text-sm font-bold text-white">Academic Disruption Rate</h4>
-              <p className="text-xs text-zinc-400 font-sans leading-relaxed">
-                Direct correlation established with missed deadlines, lecture absenteeism, and stress.
-              </p>
-            </div>
-
-          </div>
-
-          {/* Research Pipeline Sequence */}
-          <div className="space-y-4 pt-4 border-t border-zinc-900">
-            <div className="text-xs font-mono text-zinc-400 uppercase tracking-wider">
-              METHODOLOGY PIPELINE // FROM SURVEY DESIGN TO POLICY ACTION
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              {vol.researchPipeline.map((step, idx) => (
-                <div
-                  key={idx}
-                  className="p-5 rounded-2xl bg-zinc-950 border border-zinc-800 space-y-2"
-                >
-                  <div className="text-[10px] font-mono font-bold text-emerald-400">
-                    STAGE 0{step.step}
+            return (
+              <div
+                key={item.id}
+                className="bg-white border border-zinc-200 rounded-xl p-6 sm:p-8 shadow-xs"
+              >
+                <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3 pb-4 border-b border-zinc-200/80">
+                  <div>
+                    <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-zinc-500 mb-1">
+                      <span>{orgName}</span>
+                      <span>·</span>
+                      <span className="text-zinc-700">{roleTitle}</span>
+                    </div>
+                    <h3 className="text-xl font-semibold text-zinc-900">
+                      {orgName === 'GamblePause Africa'
+                        ? 'GamblePause Africa — Research & Psychological Support'
+                        : orgName}
+                    </h3>
                   </div>
-                  <h5 className="text-xs font-bold text-white">{step.title}</h5>
-                  <p className="text-[11px] text-zinc-400 leading-relaxed font-sans">
-                    {step.description}
-                  </p>
+
+                  <div className="inline-flex items-center gap-1.5 text-xs text-zinc-500 bg-zinc-50 border border-zinc-200 px-3 py-1 rounded-md self-start sm:self-auto font-medium">
+                    <span>{dates}</span>
+                  </div>
                 </div>
-              ))}
-            </div>
-          </div>
 
-          {/* Key Findings Checklist */}
-          {vol.researchFindings && vol.researchFindings.length > 0 && (
-            <div className="space-y-3 pt-2">
-              <div className="text-xs font-mono text-emerald-400 uppercase tracking-wider">
-                CORE EMPIRICAL FINDINGS
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                {vol.researchFindings.map((finding, idx) => (
-                  <div
-                    key={idx}
-                    className="text-xs text-zinc-300 bg-zinc-950 p-4 rounded-xl border border-zinc-800 flex items-start gap-3"
-                  >
-                    <span className="text-emerald-400 font-mono text-xs mt-0.5">★</span>
-                    <span className="leading-relaxed font-sans">{finding}</span>
+                <p className="text-xs sm:text-sm text-zinc-700 mt-4 leading-relaxed">
+                  {item.description}
+                </p>
+
+                {/* Achievements / Findings */}
+                {findings.length > 0 && (
+                  <div className="mt-5 space-y-2">
+                    <div className="text-xs font-semibold text-zinc-900">Key Contributions & Outcomes:</div>
+                    <ul className="space-y-2">
+                      {findings.map((ach: string, aIdx: number) => (
+                        <li key={aIdx} className="flex items-start gap-2.5 text-xs sm:text-sm text-zinc-700 leading-relaxed">
+                          <span className="w-1.5 h-1.5 rounded-full bg-zinc-400 mt-2 shrink-0" />
+                          <span dangerouslySetInnerHTML={{
+                            __html: ach
+                              .replace(/(420|71\.1%|40\.6%|3 African countries|200\+|4-day|4 days|1,000\+|15\+|100%)/g, '<strong>$1</strong>')
+                          }} />
+                        </li>
+                      ))}
+                    </ul>
                   </div>
-                ))}
+                )}
+
+                {/* Impact Metrics Callout */}
+                {impactStats.length > 0 && (
+                  <div className="mt-6 pt-5 border-t border-zinc-200/80 grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    {impactStats.map((stat, sIdx) => (
+                      <div key={sIdx} className="bg-[#FAFAFA] border border-zinc-200 rounded-lg p-4">
+                        <div className="text-2xl font-bold text-zinc-900">{stat.value}</div>
+                        <div className="text-xs font-medium text-zinc-700 mt-0.5">{stat.label}</div>
+                        <p className="text-[11px] text-zinc-500 mt-1">{stat.detail}</p>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
-            </div>
-          )}
-
+            );
+          })}
         </div>
-
       </div>
     </section>
   );
 };
-

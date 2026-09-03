@@ -3,12 +3,9 @@ import { ProjectItem } from '../types';
 import {
   X,
   ExternalLink,
-  Layers,
-  ArrowUpRight,
-  ShieldCheck,
-  TrendingUp,
   AlertCircle,
   Lightbulb,
+  TrendingUp,
 } from 'lucide-react';
 
 interface ProjectModalProps {
@@ -22,25 +19,21 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) 
   return (
     <div
       id="project-modal-backdrop"
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/85 backdrop-blur-md overflow-y-auto animate-in fade-in-50"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/40 backdrop-blur-xs overflow-y-auto animate-in fade-in duration-150"
       onClick={onClose}
     >
       <div
         id="project-modal-container"
         onClick={(e) => e.stopPropagation()}
-        className="relative w-full max-w-4xl bg-[#0d0f14] border border-zinc-800 rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]"
+        className="relative w-full max-w-3xl bg-white border border-zinc-200 rounded-xl shadow-xl overflow-hidden flex flex-col max-h-[90vh]"
       >
         {/* Header Bar */}
-        <div className="flex items-center justify-between p-6 sm:p-8 border-b border-zinc-900 bg-[#0a0c10]">
-          <div className="space-y-1.5">
-            <div className="flex items-center gap-2 text-xs font-mono">
-              <span className="text-emerald-400 uppercase tracking-widest font-bold">
-                {project.category}
-              </span>
-              <span className="text-zinc-600">//</span>
-              <span className="text-zinc-400">ARCHIVE RECORD</span>
-            </div>
-            <h3 className="font-display text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+        <div className="flex items-start justify-between p-6 border-b border-zinc-200 bg-white">
+          <div>
+            <span className="text-xs font-semibold uppercase tracking-wider text-zinc-500 block mb-1">
+              {project.category}
+            </span>
+            <h3 className="text-xl sm:text-2xl font-semibold text-zinc-900 tracking-tight">
               {project.title}
             </h3>
           </div>
@@ -48,46 +41,42 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) 
           <button
             id="btn-close-project-modal"
             onClick={onClose}
-            className="p-2.5 rounded-xl text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors border border-zinc-800"
+            className="p-1.5 rounded-md text-zinc-400 hover:text-zinc-700 hover:bg-zinc-100 transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Modal Scrollable Body */}
-        <div className="p-6 sm:p-8 overflow-y-auto space-y-8">
-          
+        <div className="p-6 sm:p-8 overflow-y-auto space-y-6">
           {/* Key Metric Spotlight */}
           {project.keyMetric && (
-            <div className="bg-zinc-950 border border-zinc-800 rounded-2xl p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-              <div className="space-y-1">
-                <span className="text-[10px] font-mono text-emerald-400 uppercase tracking-widest">
-                  PRIMARY VERIFIED BENCHMARK
+            <div className="bg-[#FAFAFA] border border-zinc-200 rounded-xl p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div>
+                <span className="text-xs font-semibold uppercase tracking-wider text-zinc-500">
+                  PRIMARY OUTCOME
                 </span>
-                <div className="text-sm font-semibold text-zinc-200">
+                <div className="text-sm font-semibold text-zinc-800 mt-0.5">
                   {project.keyMetric.label}
                 </div>
               </div>
-              <div>
-                <span className="text-3xl sm:text-4xl font-extrabold font-mono text-emerald-400">
-                  {project.keyMetric.value}
-                </span>
+              <div className="text-3xl font-bold text-zinc-900">
+                {project.keyMetric.value}
               </div>
             </div>
           )}
 
           {/* Tools & Tech Stack */}
-          <div className="space-y-2">
-            <span className="text-[11px] font-mono text-zinc-400 uppercase tracking-wider">
-              ANALYTICAL STACK & INFRASTRUCTURE
+          <div>
+            <span className="text-xs font-semibold uppercase tracking-wider text-zinc-500 block mb-2">
+              TOOLS & TECHNOLOGIES
             </span>
-            <div className="flex flex-wrap gap-2 pt-1">
-              {project.tools.map((tool, idx) => (
+            <div className="flex flex-wrap gap-2">
+              {(project.tools || []).map((tool, idx) => (
                 <span
                   key={idx}
-                  className="bg-zinc-950 border border-zinc-800 text-zinc-300 text-xs font-mono px-3 py-1.5 rounded-lg flex items-center gap-2"
+                  className="bg-[#FAFAFA] border border-zinc-200 text-zinc-700 text-xs px-2.5 py-1 rounded-md"
                 >
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
                   {tool}
                 </span>
               ))}
@@ -95,91 +84,65 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) 
           </div>
 
           {/* 1. The Challenge */}
-          <div className="space-y-2">
-            <span className="text-[11px] font-mono text-zinc-400 uppercase tracking-wider flex items-center gap-2">
-              <AlertCircle className="w-3.5 h-3.5 text-zinc-400" />
-              01 // THE BUSINESS PROBLEM & CONTEXT
-            </span>
-            <div className="p-5 rounded-2xl bg-zinc-950/70 border border-zinc-800/80 text-sm text-zinc-300 leading-relaxed font-sans">
-              {project.businessProblem}
+          <div className="space-y-1.5">
+            <div className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-zinc-500">
+              <AlertCircle className="w-3.5 h-3.5 text-zinc-500" />
+              <span>THE CHALLENGE</span>
             </div>
+            <p className="text-sm text-zinc-700 leading-relaxed bg-[#FAFAFA] p-4 rounded-xl border border-zinc-200">
+              {project.challenge || project.businessProblem || project.description || project.shortDescription}
+            </p>
           </div>
 
-          {/* 2. The Analytical Approach */}
-          <div className="space-y-2">
-            <span className="text-[11px] font-mono text-zinc-400 uppercase tracking-wider flex items-center gap-2">
-              <Layers className="w-3.5 h-3.5 text-emerald-400" />
-              02 // DATA ARCHITECTURE & METHODOLOGY
-            </span>
-            <div className="p-5 rounded-2xl bg-zinc-950/70 border border-zinc-800/80 text-sm text-zinc-300 leading-relaxed font-sans">
-              {project.approach}
+          {/* 2. Analytical Approach */}
+          <div className="space-y-1.5">
+            <div className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-zinc-500">
+              <Lightbulb className="w-3.5 h-3.5 text-zinc-500" />
+              <span>THE APPROACH & METHODOLOGY</span>
             </div>
+            <p className="text-sm text-zinc-700 leading-relaxed bg-[#FAFAFA] p-4 rounded-xl border border-zinc-200">
+              {project.solution || project.approach || 'Applied structured data cleaning, exploratory data analysis (EDA), and executive visual reporting frameworks.'}
+            </p>
           </div>
 
-          {/* 3. Discovered Insights */}
-          {project.insights && project.insights.length > 0 && (
-            <div className="space-y-2">
-              <span className="text-[11px] font-mono text-zinc-400 uppercase tracking-wider flex items-center gap-2">
-                <Lightbulb className="w-3.5 h-3.5 text-amber-400" />
-                03 // EMPIRICAL FINDINGS & DISCOVERIES
-              </span>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
-                {project.insights.map((insight, idx) => (
-                  <div
-                    key={idx}
-                    className="p-4 rounded-2xl bg-zinc-950 border border-zinc-800 text-xs sm:text-sm text-zinc-300 flex items-start gap-3"
-                  >
-                    <span className="font-mono font-bold text-emerald-400 text-xs mt-0.5">
-                      0{idx + 1}
-                    </span>
-                    <span className="leading-relaxed">{insight}</span>
-                  </div>
-                ))}
-              </div>
+          {/* 3. Business Impact */}
+          <div className="space-y-1.5">
+            <div className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-zinc-500">
+              <TrendingUp className="w-3.5 h-3.5 text-zinc-500" />
+              <span>BUSINESS IMPACT & RESULTS</span>
             </div>
+            <div className="bg-[#FAFAFA] p-4 rounded-xl border border-zinc-200">
+              <p className="text-sm text-zinc-700 leading-relaxed">
+                {project.impact || project.outcome || 'Delivered quantifiable reporting turnaround reductions, actionable commercial insights, and reliable metric governance.'}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Footer actions */}
+        <div className="p-4 sm:px-8 border-t border-zinc-200 bg-white flex items-center justify-between">
+          {project.demoUrl ? (
+            <a
+              href={project.demoUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="bg-zinc-900 hover:bg-black text-white px-4 py-2 rounded-md text-xs font-medium flex items-center gap-1.5 transition-colors shadow-xs"
+            >
+              <span>View Live Project</span>
+              <ExternalLink className="w-3.5 h-3.5" />
+            </a>
+          ) : (
+            <span className="text-xs text-zinc-500">Documented Analytics Project</span>
           )}
 
-          {/* 4. Outcome & Business Value */}
-          <div className="space-y-2">
-            <span className="text-[11px] font-mono text-emerald-400 uppercase tracking-wider flex items-center gap-2">
-              <TrendingUp className="w-3.5 h-3.5 text-emerald-400" />
-              04 // COMMERCIAL IMPACT & REALIZED EFFICIENCY
-            </span>
-            <div className="p-5 rounded-2xl bg-emerald-950/15 border border-emerald-500/20 text-sm text-emerald-200 leading-relaxed font-sans">
-              {project.outcome}
-            </div>
-          </div>
-
+          <button
+            onClick={onClose}
+            className="text-xs font-medium text-zinc-700 hover:text-black px-4 py-2 rounded border border-zinc-300 bg-white hover:bg-zinc-50 transition-colors"
+          >
+            Close
+          </button>
         </div>
-
-        {/* Footer CTAs */}
-        <div className="p-5 sm:p-6 border-t border-zinc-900 bg-[#0a0c10] flex flex-wrap items-center justify-between gap-4">
-          <div className="text-xs font-mono text-zinc-400">
-            RECORD VERIFIED // PORTFOLIO DATA PIPELINE
-          </div>
-          <div className="flex items-center gap-3">
-            {project.liveUrl && (
-              <a
-                href={project.liveUrl}
-                target="_blank"
-                rel="noreferrer"
-                className="bg-emerald-500 hover:bg-emerald-400 text-zinc-950 px-4 py-2.5 rounded-xl text-xs font-mono font-bold flex items-center gap-2 transition-colors"
-              >
-                <span>OPEN DASHBOARD</span>
-                <ExternalLink className="w-3.5 h-3.5" />
-              </a>
-            )}
-            <button
-              onClick={onClose}
-              className="bg-zinc-900 hover:bg-zinc-800 text-zinc-300 border border-zinc-800 px-4 py-2.5 rounded-xl text-xs font-mono transition-colors"
-            >
-              CLOSE
-            </button>
-          </div>
-        </div>
-
       </div>
     </div>
   );
 };
-

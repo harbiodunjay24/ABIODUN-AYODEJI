@@ -5,17 +5,12 @@ import {
   Printer,
   Copy,
   Check,
-  FileDown,
+  FileText,
   MapPin,
   Mail,
   Phone,
   Linkedin,
-  ShieldCheck,
-  FileText,
-  Briefcase,
-  GraduationCap,
-  Award,
-  Layers,
+  ExternalLink,
 } from 'lucide-react';
 
 interface CvModalProps {
@@ -33,33 +28,33 @@ export const CvModal: React.FC<CvModalProps> = ({ isOpen, onClose }) => {
 
   if (!isOpen) return null;
 
-  // ATS Plaintext generation
+  // ATS Plaintext generator
   const generateAtsPlaintext = () => {
     let text = `${(profile.fullName || 'Abiodun Ayodeji').toUpperCase()}\n`;
     text += `${profile.professionalTitle || ''}\n`;
     text += `Location: ${profile.location || ''} | Email: ${profile.email || ''} | Phone: ${profile.phone || ''}\n`;
-    text += `LinkedIn: ${profile.socialLinks?.linkedin || ''}\n\n`;
+    text += `LinkedIn: ${profile.socialLinks?.linkedin || profile.linkedinUrl || ''}\n\n`;
 
     text += `PROFESSIONAL SUMMARY\n`;
     text += `${profile.aboutMe || ''}\n\n`;
 
-    text += `CORE COMPETENCIES & TECHNICAL SKILLS\n`;
+    text += `CORE SKILLS & TECHNOLOGIES\n`;
     skills.forEach((s) => {
-      text += `• ${s.name} (${s.proficiency} - ${s.category})\n`;
+      text += `• ${s.name} (${s.category})\n`;
     });
     text += `\n`;
 
-    text += `PROFESSIONAL EXPERIENCE\n\n`;
+    text += `WORK EXPERIENCE\n\n`;
     experiences.forEach((exp) => {
-      text += `${(exp.jobTitle || '').toUpperCase()} | ${(exp.organisation || '').toUpperCase()}\n`;
-      text += `${exp.startDate || ''} - ${exp.endDate || ''} | ${exp.location || ''}\n`;
+      text += `${(exp.jobTitle || '').toUpperCase()} — ${(exp.organisation || '').toUpperCase()}\n`;
+      text += `${exp.startDate || ''} – ${exp.endDate || ''} | ${exp.location || ''}\n`;
       (exp.responsibilities || []).forEach((r) => {
         text += `• ${r}\n`;
       });
       if (exp.achievements && exp.achievements.length > 0) {
         text += `Key Achievements:\n`;
         exp.achievements.forEach((a) => {
-          text += `  * ${a}\n`;
+          text += `  - ${a}\n`;
         });
       }
       text += `\n`;
@@ -68,12 +63,12 @@ export const CvModal: React.FC<CvModalProps> = ({ isOpen, onClose }) => {
     text += `EDUCATION\n\n`;
     education.forEach((edu) => {
       text += `${edu.qualification}: ${edu.programme}\n`;
-      text += `${edu.institution} (${edu.startDate} - ${edu.endDate})\n\n`;
+      text += `${edu.institution} (${edu.startDate} – ${edu.endDate})\n\n`;
     });
 
     text += `CERTIFICATIONS\n\n`;
     certifications.forEach((c) => {
-      text += `• ${c.title} - ${c.issuingOrganisation} (${c.issueYear})\n`;
+      text += `• ${c.name} — ${c.issuer} (${c.issueDate})\n`;
     });
 
     return text;
@@ -92,52 +87,52 @@ export const CvModal: React.FC<CvModalProps> = ({ isOpen, onClose }) => {
   return (
     <div
       id="cv-modal-backdrop"
-      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/85 backdrop-blur-md overflow-y-auto animate-in fade-in-50"
+      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/40 backdrop-blur-xs overflow-y-auto animate-in fade-in duration-150"
       onClick={onClose}
     >
       <div
         id="cv-modal-container"
         onClick={(e) => e.stopPropagation()}
-        className="relative w-full max-w-4xl bg-[#08090c] border border-zinc-800 rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[92vh]"
+        className="relative w-full max-w-4xl bg-white border border-zinc-200 rounded-xl shadow-xl overflow-hidden flex flex-col max-h-[92vh]"
       >
         {/* Top Control Toolbar */}
-        <div className="flex flex-wrap items-center justify-between p-4 sm:p-5 border-b border-zinc-900 bg-[#0d0f14] gap-3">
+        <div className="flex flex-wrap items-center justify-between p-4 sm:p-5 border-b border-zinc-200 bg-[#FAFAFA] gap-3">
           <div className="flex items-center gap-3">
-            <div className="p-2 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+            <div className="p-2 rounded-lg bg-zinc-100 text-zinc-800 border border-zinc-200">
               <FileText className="w-4 h-4" />
             </div>
             <div>
-              <h3 className="text-sm sm:text-base font-bold text-white font-display">
-                Executive Curriculum Vitae
+              <h3 className="text-base font-semibold text-zinc-900">
+                Curriculum Vitae
               </h3>
-              <div className="text-[10px] text-zinc-400 font-mono">
-                GROUNDED ATS DOSSIER • UPDATED {new Date().toLocaleDateString('en-US', { month: 'short', year: 'numeric' }).toUpperCase()}
+              <div className="text-xs text-zinc-500">
+                {profile.fullName} · {profile.professionalTitle}
               </div>
             </div>
           </div>
 
           <div className="flex flex-wrap items-center gap-2">
-            {/* Toggle View Mode */}
-            <div className="flex items-center bg-zinc-950 border border-zinc-800 rounded-xl p-1">
+            {/* View Mode Toggle */}
+            <div className="flex items-center bg-white border border-zinc-200 rounded-lg p-0.5">
               <button
                 onClick={() => setViewMode('formatted')}
-                className={`px-3 py-1.5 rounded-lg text-xs font-mono transition-all ${
+                className={`px-3 py-1 rounded text-xs font-medium transition-colors ${
                   viewMode === 'formatted'
-                    ? 'bg-zinc-800 text-white font-bold shadow-sm'
-                    : 'text-zinc-400 hover:text-white'
+                    ? 'bg-zinc-900 text-white'
+                    : 'text-zinc-600 hover:text-zinc-900'
                 }`}
               >
-                EXECUTIVE
+                Executive
               </button>
               <button
                 onClick={() => setViewMode('ats-plaintext')}
-                className={`px-3 py-1.5 rounded-lg text-xs font-mono transition-all ${
+                className={`px-3 py-1 rounded text-xs font-medium transition-colors ${
                   viewMode === 'ats-plaintext'
-                    ? 'bg-zinc-800 text-white font-bold shadow-sm'
-                    : 'text-zinc-400 hover:text-white'
+                    ? 'bg-zinc-900 text-white'
+                    : 'text-zinc-600 hover:text-zinc-900'
                 }`}
               >
-                ATS PLAINTEXT
+                ATS Text
               </button>
             </div>
 
@@ -146,7 +141,7 @@ export const CvModal: React.FC<CvModalProps> = ({ isOpen, onClose }) => {
               id="btn-print-cv"
               onClick={handlePrint}
               title="Print Document"
-              className="p-2.5 rounded-xl bg-zinc-950 hover:bg-zinc-900 text-zinc-400 hover:text-white border border-zinc-800 transition-colors"
+              className="p-2 rounded-lg bg-white hover:bg-zinc-100 text-zinc-600 hover:text-zinc-900 border border-zinc-200 transition-colors"
             >
               <Printer className="w-4 h-4" />
             </button>
@@ -155,17 +150,17 @@ export const CvModal: React.FC<CvModalProps> = ({ isOpen, onClose }) => {
             <button
               id="btn-copy-cv"
               onClick={handleCopy}
-              className="bg-zinc-950 hover:bg-zinc-900 text-zinc-200 border border-zinc-800 px-3 py-2 rounded-xl text-xs font-mono flex items-center gap-2 transition-colors"
+              className="bg-white hover:bg-zinc-100 text-zinc-700 hover:text-zinc-900 border border-zinc-200 px-3 py-1.5 rounded-lg text-xs font-medium flex items-center gap-1.5 transition-colors"
             >
-              {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
-              <span>{copied ? 'COPIED' : 'COPY'}</span>
+              {copied ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
+              <span>{copied ? 'Copied' : 'Copy'}</span>
             </button>
 
             {/* Close */}
             <button
               id="btn-close-cv-modal"
               onClick={onClose}
-              className="p-2.5 rounded-xl text-zinc-400 hover:text-white hover:bg-zinc-900 border border-zinc-800 transition-colors"
+              className="p-2 rounded-lg text-zinc-400 hover:text-zinc-700 hover:bg-zinc-100 border border-zinc-200 transition-colors"
             >
               <X className="w-4 h-4" />
             </button>
@@ -173,126 +168,113 @@ export const CvModal: React.FC<CvModalProps> = ({ isOpen, onClose }) => {
         </div>
 
         {/* Modal Scrollable Document View */}
-        <div className="p-6 sm:p-10 overflow-y-auto bg-[#08090c] text-zinc-200 space-y-8 font-sans">
-          
+        <div className="p-6 sm:p-10 overflow-y-auto bg-white text-zinc-900 space-y-8 font-sans">
           {viewMode === 'ats-plaintext' ? (
-            /* ATS Plaintext view */
-            <div className="bg-zinc-950 border border-zinc-800 rounded-2xl p-6 font-mono text-xs leading-relaxed whitespace-pre-wrap text-zinc-300 select-all">
+            <div className="bg-[#FAFAFA] border border-zinc-200 rounded-lg p-6 font-mono text-xs leading-relaxed whitespace-pre-wrap text-zinc-800 select-all">
               {generateAtsPlaintext()}
             </div>
           ) : (
-            /* Formatted Executive Paper style */
             <div id="cv-paper-print" className="space-y-8 max-w-3xl mx-auto">
-              
               {/* Header */}
-              <div className="border-b border-zinc-900 pb-6 space-y-3">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div className="border-b border-zinc-200 pb-6 space-y-3">
+                <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2">
                   <div>
-                    <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight font-display">
-                      {(profile.fullName || 'Abiodun Ayodeji').toUpperCase()}
+                    <h1 className="text-2xl sm:text-3xl font-bold text-zinc-900 tracking-tight">
+                      {profile.fullName || 'Abiodun Ayodeji'}
                     </h1>
-                    <div className="text-sm font-semibold text-emerald-400 mt-1 font-mono">
+                    <div className="text-sm font-semibold text-zinc-700 mt-0.5">
                       {profile.professionalTitle}
                     </div>
                   </div>
-                  <div className="inline-flex items-center gap-1.5 text-xs text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-md border border-emerald-500/20 self-start sm:self-auto font-mono">
-                    <ShieldCheck className="w-3.5 h-3.5" />
-                    <span>VERIFIED PROFILE</span>
-                  </div>
+                  <span className="text-xs font-medium text-zinc-500">
+                    Lagos, Nigeria
+                  </span>
                 </div>
 
-                <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-xs text-zinc-400 font-mono">
+                <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-xs text-zinc-600 pt-2">
                   <span className="flex items-center gap-1.5">
-                    <MapPin className="w-3.5 h-3.5 text-zinc-500" />
-                    {profile.location}
-                  </span>
-                  <span className="flex items-center gap-1.5">
-                    <Mail className="w-3.5 h-3.5 text-zinc-500" />
+                    <Mail className="w-3.5 h-3.5 text-zinc-400" />
                     <span>{profile.email}</span>
                   </span>
                   <span className="flex items-center gap-1.5">
-                    <Phone className="w-3.5 h-3.5 text-zinc-500" />
+                    <Phone className="w-3.5 h-3.5 text-zinc-400" />
                     <span>{profile.phone}</span>
+                  </span>
+                  <span className="flex items-center gap-1.5">
+                    <Linkedin className="w-3.5 h-3.5 text-zinc-400" />
+                    <span>{profile.linkedinUrl || 'linkedin.com/in/abiodun-ayodeji'}</span>
                   </span>
                 </div>
               </div>
 
               {/* Summary */}
-              <div className="space-y-2">
-                <h2 className="text-xs font-mono font-bold uppercase tracking-wider text-emerald-400 flex items-center gap-2">
-                  <FileText className="w-3.5 h-3.5" />
-                  <span>Executive Summary</span>
+              <div>
+                <h2 className="text-xs font-semibold uppercase tracking-wider text-zinc-500 mb-2">
+                  Professional Summary
                 </h2>
-                <p className="text-sm text-zinc-300 leading-relaxed font-sans">
+                <p className="text-xs sm:text-sm text-zinc-700 leading-relaxed">
                   {profile.aboutMe}
                 </p>
               </div>
 
-              {/* Core Skills Matrix */}
-              <div className="space-y-3">
-                <h2 className="text-xs font-mono font-bold uppercase tracking-wider text-emerald-400 flex items-center gap-2">
-                  <Layers className="w-3.5 h-3.5" />
-                  <span>Technical & Analytical Competencies</span>
+              {/* Core Skills */}
+              <div>
+                <h2 className="text-xs font-semibold uppercase tracking-wider text-zinc-500 mb-3">
+                  Core Skills & Technical Competencies
                 </h2>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
-                  {skills.map((sk) => (
-                    <div
-                      key={sk.id}
-                      className="p-3 bg-[#0d0f14] border border-zinc-800 rounded-xl flex items-center justify-between"
+                <div className="flex flex-wrap gap-2">
+                  {skills.map((s) => (
+                    <span
+                      key={s.id}
+                      className="bg-[#FAFAFA] border border-zinc-200 text-zinc-800 text-xs px-2.5 py-1 rounded"
                     >
-                      <span className="font-semibold text-zinc-200">{sk.name}</span>
-                      <span className="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded">
-                        {sk.proficiency}
-                      </span>
-                    </div>
+                      {s.name}
+                    </span>
                   ))}
                 </div>
               </div>
 
-              {/* Experience */}
-              <div className="space-y-5">
-                <h2 className="text-xs font-mono font-bold uppercase tracking-wider text-emerald-400 flex items-center gap-2">
-                  <Briefcase className="w-3.5 h-3.5" />
-                  <span>Work Experience</span>
+              {/* Professional Experience */}
+              <div>
+                <h2 className="text-xs font-semibold uppercase tracking-wider text-zinc-500 mb-4">
+                  Professional Experience
                 </h2>
-
                 <div className="space-y-6">
                   {experiences.map((exp) => (
-                    <div key={exp.id} className="space-y-2.5 p-4 rounded-2xl bg-[#0d0f14] border border-zinc-800/80">
-                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+                    <div key={exp.id} className="space-y-2">
+                      <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1">
                         <div>
-                          <h3 className="text-sm font-bold text-white font-display">
+                          <span className="text-sm font-semibold text-zinc-900">
                             {exp.jobTitle}
-                          </h3>
-                          <div className="text-xs font-semibold text-emerald-400 font-mono">
-                            {exp.organisation} • {exp.location}
-                          </div>
+                          </span>
+                          <span className="text-zinc-400 mx-1.5">·</span>
+                          <span className="text-xs font-medium text-zinc-700">
+                            {exp.organisation}
+                          </span>
                         </div>
-                        <div className="text-xs font-mono text-zinc-400">
+                        <span className="text-xs text-zinc-500">
                           {exp.startDate} – {exp.endDate}
-                        </div>
+                        </span>
                       </div>
 
-                      <ul className="space-y-1.5 pl-2">
-                        {exp.responsibilities.map((r, i) => (
-                          <li key={i} className="text-xs text-zinc-300 flex items-start gap-2">
-                            <span className="w-1.5 h-1.5 rounded-full bg-zinc-600 mt-1.5 shrink-0" />
-                            <span>{r}</span>
+                      <ul className="space-y-1.5 text-xs text-zinc-600 pl-4 list-disc">
+                        {(exp.responsibilities || []).map((resp, i) => (
+                          <li key={i} className="leading-relaxed">
+                            {resp}
                           </li>
                         ))}
                       </ul>
 
                       {exp.achievements && exp.achievements.length > 0 && (
-                        <div className="p-3 rounded-xl bg-zinc-950 border border-zinc-800 space-y-1 mt-2">
-                          <span className="text-[10px] font-mono font-bold text-emerald-400 uppercase tracking-wider">
-                            KEY ACHIEVEMENTS:
+                        <div className="mt-2 bg-[#FAFAFA] p-3 rounded border border-zinc-200">
+                          <span className="text-[11px] font-semibold text-zinc-700 block mb-1">
+                            Key Achievements:
                           </span>
-                          {exp.achievements.map((ach, i) => (
-                            <div key={i} className="text-xs text-zinc-200 flex items-start gap-2 font-sans">
-                              <span className="text-emerald-400 font-mono">★</span>
-                              <span>{ach}</span>
-                            </div>
-                          ))}
+                          <ul className="space-y-1 text-xs text-zinc-600 pl-4 list-disc">
+                            {exp.achievements.map((ach, i) => (
+                              <li key={i}>{ach}</li>
+                            ))}
+                          </ul>
                         </div>
                       )}
                     </div>
@@ -300,72 +282,76 @@ export const CvModal: React.FC<CvModalProps> = ({ isOpen, onClose }) => {
                 </div>
               </div>
 
-              {/* Education & Certifications */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-4 border-t border-zinc-900">
+              {/* Education */}
+              <div>
+                <h2 className="text-xs font-semibold uppercase tracking-wider text-zinc-500 mb-3">
+                  Education
+                </h2>
                 <div className="space-y-3">
-                  <h2 className="text-xs font-mono font-bold uppercase tracking-wider text-emerald-400 flex items-center gap-2">
-                    <GraduationCap className="w-3.5 h-3.5" />
-                    <span>Education</span>
-                  </h2>
-                  <div className="space-y-3">
-                    {education.map((edu) => (
-                      <div key={edu.id} className="text-xs space-y-1 p-3 rounded-xl bg-[#0d0f14] border border-zinc-800">
-                        <div className="font-bold text-white">{edu.qualification} in {edu.programme}</div>
-                        <div className="text-zinc-400 font-mono">{edu.institution} ({edu.startDate} - {edu.endDate})</div>
-                        {edu.honours && <div className="text-amber-400 font-mono text-[11px]">{edu.honours}</div>}
+                  {education.map((edu) => (
+                    <div key={edu.id} className="flex justify-between items-baseline text-xs">
+                      <div>
+                        <span className="font-semibold text-zinc-900">{edu.qualification}</span>
+                        <span className="text-zinc-400 mx-1.5">·</span>
+                        <span className="text-zinc-700">{edu.programme}</span>
+                        <div className="text-zinc-500 text-[11px]">{edu.institution}</div>
                       </div>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="space-y-3">
-                  <h2 className="text-xs font-mono font-bold uppercase tracking-wider text-emerald-400 flex items-center gap-2">
-                    <Award className="w-3.5 h-3.5" />
-                    <span>Certifications</span>
-                  </h2>
-                  <div className="space-y-2">
-                    {certifications.map((c) => (
-                      <div key={c.id} className="text-xs p-3 rounded-xl bg-[#0d0f14] border border-zinc-800">
-                        <span className="font-semibold text-zinc-200">{c.title}</span>
-                        <div className="text-zinc-400 font-mono text-[11px]">{c.issuingOrganisation} ({c.issueYear})</div>
-                      </div>
-                    ))}
-                  </div>
+                      <span className="text-zinc-500">{edu.startDate} – {edu.endDate}</span>
+                    </div>
+                  ))}
                 </div>
               </div>
 
+              {/* Certifications */}
+              <div>
+                <h2 className="text-xs font-semibold uppercase tracking-wider text-zinc-500 mb-3">
+                  Certifications & Verified Credentials
+                </h2>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                  {certifications.map((c) => {
+                    const certTitle = c.title || c.name || 'Certification';
+                    const certIssuer = c.issuingOrganisation || c.issuer || 'Credential Issuer';
+                    const certYear = c.issueYear || c.issueDate || '2024';
+                    return (
+                      <div key={c.id} className="p-2.5 rounded bg-[#FAFAFA] border border-zinc-200 flex flex-col justify-between">
+                        <div>
+                          <div className="font-semibold text-zinc-900">{certTitle}</div>
+                          <div className="text-[11px] text-zinc-500 mt-0.5">{certIssuer} · {certYear}</div>
+                          {c.skillsTagged && c.skillsTagged.length > 0 && (
+                            <div className="mt-1.5 flex flex-wrap gap-1">
+                              {c.skillsTagged.map((subj, idx) => (
+                                <span
+                                  key={idx}
+                                  className="text-[10px] bg-white border border-zinc-200 px-1.5 py-0.5 rounded text-zinc-600 font-medium"
+                                >
+                                  {subj}
+                                </span>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                        {c.credentialUrl && (
+                          <div className="mt-2 pt-1.5 border-t border-zinc-200/60">
+                            <a
+                              href={c.credentialUrl}
+                              target={c.credentialUrl.startsWith('#') ? undefined : '_blank'}
+                              rel={c.credentialUrl.startsWith('#') ? undefined : 'noopener noreferrer'}
+                              className="text-[11px] font-semibold text-zinc-800 hover:text-black hover:underline inline-flex items-center gap-1"
+                            >
+                              <span>{c.credentialUrl.startsWith('#') ? 'Document Vault' : 'Verify Link'}</span>
+                              <ExternalLink className="w-3 h-3 text-zinc-500" />
+                            </a>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
             </div>
           )}
-
         </div>
-
-        {/* Footer CTAs */}
-        <div className="p-4 sm:p-5 border-t border-zinc-900 bg-[#0d0f14] flex flex-wrap items-center justify-between gap-3">
-          <div className="text-xs text-zinc-400 font-mono">
-            GROUNDED DOSSIER READY FOR RECRUITMENT ATS
-          </div>
-
-          <div className="flex items-center gap-3">
-            <button
-              onClick={handleCopy}
-              className="bg-zinc-950 hover:bg-zinc-900 text-zinc-200 border border-zinc-800 px-4 py-2.5 rounded-xl text-xs font-mono flex items-center gap-2 transition-colors"
-            >
-              <Copy className="w-3.5 h-3.5" />
-              <span>COPY TEXT</span>
-            </button>
-
-            <button
-              onClick={handlePrint}
-              className="bg-emerald-500 hover:bg-emerald-400 text-zinc-950 px-5 py-2.5 rounded-xl text-xs font-mono font-bold flex items-center gap-2 transition-colors shadow-sm"
-            >
-              <FileDown className="w-4 h-4" />
-              <span>SAVE / PRINT PDF</span>
-            </button>
-          </div>
-        </div>
-
       </div>
     </div>
   );
 };
-

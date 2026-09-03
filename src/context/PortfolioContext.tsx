@@ -15,9 +15,193 @@ import {
 import { defaultPortfolioData } from '../data/defaultProfile';
 import confetti from 'canvas-confetti';
 
-const STORAGE_LIVE_KEY = 'abiodun_portfolio_live_v2';
-const STORAGE_DRAFT_KEY = 'abiodun_portfolio_draft_v2';
-const STORAGE_AUTH_KEY = 'abiodun_portfolio_admin_auth_v2';
+const STORAGE_LIVE_KEY = 'abiodun_portfolio_live_v3';
+const STORAGE_DRAFT_KEY = 'abiodun_portfolio_draft_v3';
+const STORAGE_AUTH_KEY = 'abiodun_portfolio_admin_auth_v3';
+
+export const sanitizePortfolioData = (data: Partial<PortfolioData> | null | undefined): PortfolioData => {
+  if (!data || typeof data !== 'object') return defaultPortfolioData;
+
+  const rawPhoto = data.profile?.profilePhoto || '';
+  const cleanPhoto =
+    rawPhoto.includes('abiodun_ayodeji_portrait') || rawPhoto.includes('profile_photo.jpg')
+      ? ''
+      : rawPhoto;
+
+  const rawPhone = data.profile?.phone || '';
+  const cleanPhone =
+    !rawPhone || rawPhone.includes('813') || rawPhone.includes('000') || rawPhone.includes('000 0000')
+      ? '07054195682'
+      : rawPhone;
+
+  const rawGithub = data.profile?.socialLinks?.github || '';
+  const cleanGithub =
+    !rawGithub || rawGithub.includes('ayodejiharbiodun24')
+      ? 'https://github.com/harbiodunjay24'
+      : rawGithub;
+
+  const profile = {
+    ...defaultPortfolioData.profile,
+    ...(data.profile || {}),
+    phone: cleanPhone,
+    profilePhoto: cleanPhoto,
+    socialLinks: {
+      ...defaultPortfolioData.profile.socialLinks,
+      ...(data.profile?.socialLinks || {}),
+      github: cleanGithub,
+    },
+    heroKpis:
+      Array.isArray(data.profile?.heroKpis) && data.profile.heroKpis.length > 0
+        ? data.profile.heroKpis
+        : defaultPortfolioData.profile.heroKpis,
+  };
+
+  const experiences = (
+    Array.isArray(data.experiences) && data.experiences.length > 0
+      ? data.experiences
+      : defaultPortfolioData.experiences
+  ).map((exp, idx) => ({
+    ...exp,
+    id: exp.id || `exp-${idx}`,
+    jobTitle: exp.jobTitle || (exp as any).role || 'Performance & Planning Analyst',
+    organisation: exp.organisation || (exp as any).company || 'MultiChoice Group',
+    location: exp.location || 'Lagos, Nigeria',
+    startDate: exp.startDate || '2024',
+    endDate: exp.endDate || 'Present',
+    isCurrent: exp.isCurrent ?? false,
+    order: exp.order ?? idx,
+    responsibilities: Array.isArray(exp.responsibilities) ? exp.responsibilities : [],
+    achievements: Array.isArray(exp.achievements) ? exp.achievements : [],
+    technologies: Array.isArray((exp as any).technologies) ? (exp as any).technologies : ['Power BI', 'SQL', 'Excel'],
+  }));
+
+  const projects = (
+    Array.isArray(data.projects) && data.projects.length > 0
+      ? data.projects
+      : defaultPortfolioData.projects
+  ).map((p, idx) => ({
+    ...p,
+    id: p.id || `proj-${idx}`,
+    title: p.title || 'Analytics Project',
+    shortDescription: p.shortDescription || (p as any).description || '',
+    category: p.category || 'Business Intelligence',
+    tools: Array.isArray(p.tools) ? p.tools : ['Power BI', 'SQL', 'Excel'],
+    insights: Array.isArray(p.insights) ? p.insights : [],
+    metrics: Array.isArray(p.metrics) ? p.metrics : [],
+  }));
+
+  const skills =
+    Array.isArray(data.skills) && data.skills.length >= defaultPortfolioData.skills.length
+      ? data.skills
+      : defaultPortfolioData.skills;
+
+  const certifications = (
+    Array.isArray(data.certifications) && data.certifications.length > 0
+      ? data.certifications
+      : defaultPortfolioData.certifications
+  ).map((c, idx) => {
+    const defaultCert =
+      defaultPortfolioData.certifications.find((dc) => dc.id === c.id) ||
+      defaultPortfolioData.certifications[idx] ||
+      {};
+    const title = c.title || (c as any).name || (defaultCert as any).title || 'Professional Certification';
+    const issuer = c.issuingOrganisation || (c as any).issuer || (defaultCert as any).issuingOrganisation || 'Credential Issuer';
+    const year = c.issueYear || (c as any).issueDate || (defaultCert as any).issueYear || '2024';
+    return {
+      ...defaultCert,
+      ...c,
+      id: c.id || (defaultCert as any).id || `cert-${idx}`,
+      title,
+      name: title,
+      issuingOrganisation: issuer,
+      issuer,
+      issueYear: year,
+      issueDate: year,
+      credentialUrl: c.credentialUrl || (defaultCert as any).credentialUrl || '',
+      credentialId: c.credentialId || (defaultCert as any).credentialId || '',
+      description: c.description || (defaultCert as any).description || '',
+      skillsTagged:
+        Array.isArray(c.skillsTagged) && c.skillsTagged.length > 0
+          ? c.skillsTagged
+          : ((defaultCert as any).skillsTagged || []),
+    };
+  });
+
+  const education =
+    Array.isArray(data.education) && data.education.length > 0
+      ? data.education
+      : defaultPortfolioData.education;
+
+  const volunteering = (
+    Array.isArray(data.volunteering) && data.volunteering.length > 0
+      ? data.volunteering
+      : defaultPortfolioData.volunteering
+  ).map((v, idx) => ({
+    ...v,
+    id: v.id || `vol-${idx}`,
+    organisation: v.organisation || (v as any).organization || 'Community Initiative',
+    role: v.role || 'Volunteer',
+    dates: v.dates || (v as any).period || '2024',
+    description: v.description || '',
+    impactStats: Array.isArray(v.impactStats) ? v.impactStats : [],
+    researchPipeline: Array.isArray(v.researchPipeline) ? v.researchPipeline : [],
+    researchFindings: Array.isArray(v.researchFindings) ? v.researchFindings : [],
+    links: Array.isArray(v.links) ? v.links : [],
+  }));
+
+  const documents = (
+    Array.isArray(data.documents) && data.documents.length > 0
+      ? data.documents
+      : defaultPortfolioData.documents
+  ).map((d, idx) => {
+    const defaultDoc =
+      defaultPortfolioData.documents.find((dd) => dd.id === d.id) ||
+      defaultPortfolioData.documents[idx] ||
+      {};
+    return {
+      ...defaultDoc,
+      ...d,
+      id: d.id || (defaultDoc as any).id || `doc-${idx}`,
+      name: d.name || (defaultDoc as any).name || 'Verified Document',
+      fileName: d.fileName || (defaultDoc as any).fileName || 'document.pdf',
+      category: d.category || (defaultDoc as any).category || 'CV',
+      fileSize: d.fileSize || d.size || (defaultDoc as any).fileSize || '200 KB',
+      size: d.size || d.fileSize || (defaultDoc as any).size || '200 KB',
+      format: d.format || d.fileType || (defaultDoc as any).format || 'PDF Document',
+      fileType: d.fileType || d.format || (defaultDoc as any).fileType || 'PDF Document',
+      description: d.description || (defaultDoc as any).description || '',
+      content: d.content || (defaultDoc as any).content || '',
+      isPublic: d.isPublic ?? true,
+      isFeatured: d.isFeatured ?? (defaultDoc as any).isFeatured ?? false,
+      source: d.source || (defaultDoc as any).source || 'Uploaded PDF',
+      currentVersion: d.currentVersion || (defaultDoc as any).currentVersion || '1.0',
+      lastUpdated: d.lastUpdated || (defaultDoc as any).lastUpdated || '2026',
+    };
+  });
+
+  const coverLetters = Array.isArray(data.coverLetters)
+    ? data.coverLetters
+    : defaultPortfolioData.coverLetters || [];
+
+  const settings = {
+    ...defaultPortfolioData.settings,
+    ...(data.settings || {}),
+  };
+
+  return {
+    profile,
+    experiences,
+    projects,
+    skills,
+    certifications,
+    education,
+    volunteering,
+    documents,
+    coverLetters,
+    settings,
+    lastUpdated: data.lastUpdated || defaultPortfolioData.lastUpdated,
+  };
+};
 
 interface AdminUser {
   email: string;
@@ -45,6 +229,7 @@ interface PortfolioContextType {
 
   // Granular Actions
   updateProfile: (profile: Partial<ProfileData>) => void;
+  setProfilePhotoDirect: (photoUrl: string) => void;
   addExperience: (exp: Omit<ExperienceItem, 'id' | 'order'>) => void;
   updateExperience: (id: string, exp: Partial<ExperienceItem>) => void;
   deleteExperience: (id: string) => void;
@@ -78,7 +263,18 @@ export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   const [liveData, setLiveData] = useState<PortfolioData>(() => {
     try {
       const saved = localStorage.getItem(STORAGE_LIVE_KEY);
-      if (saved) return JSON.parse(saved);
+      if (saved) return sanitizePortfolioData(JSON.parse(saved));
+      const oldSaved = localStorage.getItem('abiodun_portfolio_live_v2');
+      if (oldSaved) {
+        const parsed = JSON.parse(oldSaved);
+        const photo = parsed.profile?.profilePhoto;
+        if (photo && !photo.includes('abiodun_ayodeji_portrait') && !photo.includes('profile_photo.jpg')) {
+          return sanitizePortfolioData({
+            ...defaultPortfolioData,
+            profile: { ...defaultPortfolioData.profile, profilePhoto: photo },
+          });
+        }
+      }
     } catch (e) {
       console.error('Error loading live data from storage', e);
     }
@@ -88,7 +284,7 @@ export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   const [draftData, setDraftData] = useState<PortfolioData>(() => {
     try {
       const saved = localStorage.getItem(STORAGE_DRAFT_KEY);
-      if (saved) return JSON.parse(saved);
+      if (saved) return sanitizePortfolioData(JSON.parse(saved));
     } catch (e) {
       console.error('Error loading draft data from storage', e);
     }
@@ -145,7 +341,7 @@ export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   // Save changes to draft
   const saveDraft = (updater: (prev: PortfolioData) => PortfolioData) => {
     setDraftData((prev) => {
-      const updated = updater(prev);
+      const updated = sanitizePortfolioData(updater(prev));
       return {
         ...updated,
         lastUpdated: new Date().toISOString(),
@@ -231,6 +427,36 @@ export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       ...prev,
       profile: { ...prev.profile, ...profileUpdates },
     }));
+  };
+
+  const setProfilePhotoDirect = (photoUrl: string) => {
+    const clean = photoUrl.trim();
+    setLiveData((prev) => {
+      const updated = {
+        ...prev,
+        profile: { ...prev.profile, profilePhoto: clean },
+        lastUpdated: new Date().toISOString(),
+      };
+      try {
+        localStorage.setItem(STORAGE_LIVE_KEY, JSON.stringify(updated));
+      } catch (e) {
+        console.error('Error saving live photo to storage', e);
+      }
+      return updated;
+    });
+    setDraftData((prev) => {
+      const updated = {
+        ...prev,
+        profile: { ...prev.profile, profilePhoto: clean },
+        lastUpdated: new Date().toISOString(),
+      };
+      try {
+        localStorage.setItem(STORAGE_DRAFT_KEY, JSON.stringify(updated));
+      } catch (e) {
+        console.error('Error saving draft photo to storage', e);
+      }
+      return updated;
+    });
   };
 
   const addExperience = (exp: Omit<ExperienceItem, 'id' | 'order'>) => {
@@ -476,6 +702,7 @@ export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         discardDraft,
         resetToDefault,
         updateProfile,
+        setProfilePhotoDirect,
         addExperience,
         updateExperience,
         deleteExperience,

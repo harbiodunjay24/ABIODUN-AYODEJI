@@ -1,17 +1,13 @@
 import React from 'react';
 import { usePortfolio } from '../context/PortfolioContext';
-import {
-  Lock,
-  ArrowUp,
-  ShieldCheck,
-} from 'lucide-react';
+import { Lock, ArrowUp } from 'lucide-react';
 
 interface FooterProps {
   onOpenAdminAuth: () => void;
   onOpenCvModal: () => void;
 }
 
-export const Footer: React.FC<FooterProps> = ({ onOpenAdminAuth, onOpenCvModal }) => {
+export const Footer: React.FC<FooterProps> = ({ onOpenAdminAuth }) => {
   const { data, isAdminAuthenticated, activeView, setActiveView } = usePortfolio();
 
   const scrollToTop = () => {
@@ -19,77 +15,63 @@ export const Footer: React.FC<FooterProps> = ({ onOpenAdminAuth, onOpenCvModal }
   };
 
   return (
-    <footer id="main-footer" className="bg-[#050608] border-t border-zinc-900 py-16 text-zinc-400 text-xs">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
-        
-        <div className="flex flex-col md:flex-row items-center justify-between gap-8 pb-10 border-b border-zinc-900">
-          
-          {/* Brand & Identity */}
-          <div className="flex flex-col items-center md:items-start text-center md:text-left space-y-1.5">
-            <div className="font-display text-lg font-bold text-white tracking-tight flex items-center gap-2">
-              <span>{(data.profile?.fullName || 'Abiodun Ayodeji').toUpperCase()}</span>
-              <span className="text-zinc-600">//</span>
-              <span className="text-emerald-400 font-mono text-xs">DOSSIER</span>
+    <footer id="main-footer" className="bg-[#FAFAFA] border-t border-zinc-200 py-14 text-zinc-500 text-xs">
+      <div className="max-w-6xl mx-auto px-6 sm:px-8 space-y-8">
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 pb-8 border-b border-zinc-200">
+          {/* Identity */}
+          <div>
+            <div className="text-base font-semibold text-zinc-900">
+              {data.profile?.fullName || 'Abiodun Ayodeji'}
             </div>
-            <p className="text-xs text-zinc-400 font-sans">
-              Data Analyst • Performance & Planning • Business Intelligence Architecture
+            <p className="text-xs text-zinc-500 mt-0.5">
+              Data Analyst · Performance & Planning
             </p>
           </div>
 
-          {/* Quick Links */}
-          <div className="flex flex-wrap items-center justify-center gap-6 text-xs font-mono text-zinc-400">
-            <a href="#about" className="hover:text-emerald-400 transition-colors">01.ABOUT</a>
-            <a href="#experience" className="hover:text-emerald-400 transition-colors">02.TIMELINE</a>
-            <a href="#projects" className="hover:text-emerald-400 transition-colors">03.CASE STUDIES</a>
-            <a href="#skills" className="hover:text-emerald-400 transition-colors">04.TOOLKIT</a>
-            <a href="#impact" className="hover:text-emerald-400 transition-colors">05.IMPACT</a>
-            <a href="#documents" className="hover:text-emerald-400 transition-colors">06.VAULT</a>
-            <a href="#ask-ai" className="hover:text-emerald-400 transition-colors">AI COPILOT</a>
-            <a href="#contact" className="hover:text-emerald-400 transition-colors">07.CONTACT</a>
+          {/* Navigation Links */}
+          <div className="flex flex-wrap items-center gap-5 text-xs text-zinc-600">
+            <a href="#about" className="hover:text-zinc-900 transition-colors">About</a>
+            <a href="#experience" className="hover:text-zinc-900 transition-colors">Experience</a>
+            <a href="#projects" className="hover:text-zinc-900 transition-colors">Projects</a>
+            <a href="#skills" className="hover:text-zinc-900 transition-colors">Skills</a>
+            <a href="#impact" className="hover:text-zinc-900 transition-colors">Beyond Work</a>
+            <a href="#documents" className="hover:text-zinc-900 transition-colors">Documents</a>
+            <a href="#ask-ai" className="hover:text-zinc-900 transition-colors">Assistant</a>
+            <a href="#contact" className="hover:text-zinc-900 transition-colors">Contact</a>
           </div>
 
-          {/* Back to top button */}
+          {/* Return to top */}
           <button
             onClick={scrollToTop}
-            className="px-4 py-2.5 rounded-xl bg-[#0d0f14] hover:bg-zinc-900 text-zinc-400 hover:text-white border border-zinc-800 transition-colors flex items-center gap-2 text-xs font-mono"
+            className="text-xs text-zinc-600 hover:text-zinc-900 flex items-center gap-1.5 transition-colors border border-zinc-200 bg-white px-3 py-1.5 rounded-md shadow-2xs"
           >
-            <span>RETURN TOP</span>
-            <ArrowUp className="w-3.5 h-3.5" />
+            <span>Back to top</span>
+            <ArrowUp className="w-3 h-3" />
           </button>
         </div>
 
-        {/* Bottom Bar: Copyright, Grounded Verification badge, Admin Entry */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-2 text-[11px] text-zinc-400 font-mono">
-            <span>© {new Date().getFullYear()} {(data.profile?.fullName || 'Abiodun Ayodeji').toUpperCase()}. ALL RIGHTS RESERVED.</span>
+        {/* Bottom copyright & discrete admin lock */}
+        <div className="flex items-center justify-between text-xs text-zinc-500">
+          <div>
+            © {new Date().getFullYear()} {data.profile?.fullName || 'Abiodun Ayodeji'}. All rights reserved.
           </div>
 
-          <div className="flex items-center gap-4">
-            <div className="inline-flex items-center gap-1.5 text-[11px] text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-md border border-emerald-500/20 font-mono">
-              <ShieldCheck className="w-3.5 h-3.5" />
-              <span>GROUNDED IN VERIFIED ATS DOSSIER</span>
-            </div>
-
-            {/* Admin CMS Entrance */}
-            <button
-              id="btn-footer-admin-lock"
-              onClick={() => {
-                if (isAdminAuthenticated) {
-                  setActiveView(activeView === 'admin' ? 'public' : 'admin');
-                } else {
-                  onOpenAdminAuth();
-                }
-              }}
-              title="Private Administrator Dashboard"
-              className="p-2 rounded-lg text-zinc-400 hover:text-emerald-400 hover:bg-[#0d0f14] border border-zinc-800/80 transition-colors"
-            >
-              <Lock className="w-3.5 h-3.5" />
-            </button>
-          </div>
+          <button
+            id="btn-footer-admin-lock"
+            onClick={() => {
+              if (isAdminAuthenticated) {
+                setActiveView(activeView === 'admin' ? 'public' : 'admin');
+              } else {
+                onOpenAdminAuth();
+              }
+            }}
+            title="Administrator Panel Access"
+            className="p-1.5 rounded text-zinc-400 hover:text-zinc-800 hover:bg-zinc-200 transition-colors"
+          >
+            <Lock className="w-3.5 h-3.5" />
+          </button>
         </div>
-
       </div>
     </footer>
   );
 };
-

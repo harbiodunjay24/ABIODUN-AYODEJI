@@ -7,11 +7,10 @@ import {
   Download,
   Eye,
   ExternalLink,
-  FolderOpen,
-  Sparkles,
   Copy,
   Check,
   X,
+  Sparkles,
 } from 'lucide-react';
 
 interface DocumentCentreProps {
@@ -31,16 +30,19 @@ export const DocumentCentre: React.FC<DocumentCentreProps> = ({
   const [previewDoc, setPreviewDoc] = useState<DocumentItem | null>(null);
   const [copied, setCopied] = useState(false);
 
-  const categories = ['All', 'CV', 'Resume', 'Cover Letter', 'Research', 'Certificates', 'Reports'];
+  const categories = ['All', 'CV', 'Resume', 'Cover Letter', 'Research', 'Certificates'];
 
   const filteredDocs = (documents || []).filter((doc) => {
     const query = (searchQuery || '').toLowerCase().trim();
     const docCat = doc.category || '';
-    const matchesCat = selectedCategory === 'All' || docCat === selectedCategory || (selectedCategory === 'Certificates' && docCat.includes('Cert')) || (selectedCategory === 'Reports' && docCat.includes('Report'));
-    
+    const matchesCat =
+      selectedCategory === 'All' ||
+      docCat === selectedCategory ||
+      (selectedCategory === 'Certificates' && docCat.includes('Cert'));
+
     const docName = doc.name || doc.fileName || '';
     const docDesc = doc.description || '';
-    
+
     const matchesSearch =
       !query ||
       docName.toLowerCase().includes(query) ||
@@ -58,232 +60,215 @@ export const DocumentCentre: React.FC<DocumentCentreProps> = ({
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const handleDownloadDoc = (doc: DocumentItem) => {
+    if (doc.fileUrl) {
+      window.open(doc.fileUrl, '_blank');
+      return;
+    }
+    // Generate text/markdown file download
+    const element = document.createElement('a');
+    const file = new Blob([doc.content || `${doc.name}\n\nAbiodun Ayodeji\nData Analyst | Performance & Planning`], {
+      type: 'text/plain;charset=utf-8',
+    });
+    element.href = URL.createObjectURL(file);
+    element.download = doc.fileName || `${doc.name.toLowerCase().replace(/\s+/g, '_')}.txt`;
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
+  };
+
   return (
-    <section id="documents" className="py-24 relative bg-[#08090c] border-t border-zinc-900">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
-        {/* Section Tag */}
-        <div className="flex items-center gap-3 text-xs font-mono text-zinc-400 uppercase tracking-widest mb-6">
-          <span className="w-2 h-2 rounded-full bg-emerald-400" />
-          <span>RESOURCES & CREDENTIALS</span>
-          <span className="text-zinc-600">//</span>
-          <span className="text-zinc-400">06</span>
-        </div>
+    <section id="documents" className="py-20 bg-white border-b border-zinc-200">
+      <div className="max-w-6xl mx-auto px-6 sm:px-8">
+        {/* Section Label */}
+        <span className="text-xs font-semibold uppercase tracking-wider text-zinc-500 mb-2 block">
+          DOCUMENT & CREDENTIAL VAULT
+        </span>
 
         {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-6">
           <div>
-            <h2 className="font-display text-4xl sm:text-5xl font-extrabold text-white tracking-tight">
-              DOCUMENT VAULT
+            <h2 className="text-3xl sm:text-4xl font-semibold tracking-tight text-zinc-900">
+              Documents & Credentials Vault
             </h2>
-            <p className="text-zinc-400 text-sm sm:text-base max-w-2xl mt-2 font-normal">
-              Direct access to verified resumes, executive bios, research publications, and analytical dossiers.
+            <p className="text-sm sm:text-base text-zinc-600 mt-2 max-w-2xl">
+              Access verified CVs, targeted resumes, research reports, and academic credentials.
             </p>
           </div>
 
-          {/* Quick AI Statement Creator Button */}
-          <button
-            id="btn-doc-create-cover-letter"
-            onClick={onOpenCoverLetterAi}
-            className="bg-emerald-500 hover:bg-emerald-400 text-zinc-950 px-4 py-2.5 rounded-xl text-xs font-mono font-bold flex items-center gap-2 transition-all shadow-sm self-start md:self-auto"
-          >
-            <Sparkles className="w-4 h-4" />
-            <span>AI TAILORED STATEMENT</span>
-          </button>
+          <div className="flex flex-wrap items-center gap-3 self-start md:self-auto">
+            <button
+              onClick={onOpenCvModal}
+              className="bg-zinc-900 hover:bg-black text-white px-4 py-2.5 rounded-md text-xs font-medium flex items-center gap-2 transition-colors shadow-xs"
+            >
+              <FileText className="w-3.5 h-3.5" />
+              <span>Full Interactive CV</span>
+            </button>
+
+            <button
+              onClick={onOpenCoverLetterAi}
+              className="bg-white hover:bg-zinc-50 text-zinc-800 border border-zinc-300 px-3.5 py-2.5 rounded-md text-xs font-medium flex items-center gap-2 transition-colors"
+            >
+              <Sparkles className="w-3.5 h-3.5 text-zinc-600" />
+              <span>AI Cover Letter</span>
+            </button>
+          </div>
         </div>
 
-        {/* Search & Category Filter Bar */}
-        <div className="bg-[#0d0f14] border border-zinc-800 p-3 rounded-2xl mb-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-          
-          {/* Search Box */}
+        {/* What is this for? Explanatory Note */}
+        <div className="bg-zinc-50 border border-zinc-200 rounded-xl p-4 mb-8 text-xs text-zinc-700 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="flex items-start sm:items-center gap-2.5">
+            <div className="w-2 h-2 rounded-full bg-emerald-500 mt-1.5 sm:mt-0 shrink-0" />
+            <p className="leading-relaxed">
+              <span className="font-semibold text-zinc-900">What is this for?</span> This vault provides recruiters, clients, and partners instant, verified access to Abiodun's updated CVs, role-specific resumes, and research findings without waiting for email attachments.
+            </p>
+          </div>
+          <span className="inline-flex items-center gap-1 text-[11px] font-medium text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded shrink-0">
+            <Check className="w-3 h-3 text-emerald-600" />
+            Verified & Accessible
+          </span>
+        </div>
+
+        {/* Search & Filter Bar */}
+        <div className="bg-[#FAFAFA] border border-zinc-200 p-3 rounded-lg mb-8 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="relative w-full sm:w-80">
-            <Search className="w-4 h-4 text-zinc-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
+            <Search className="w-4 h-4 text-zinc-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
             <input
               type="text"
-              placeholder="Search documents, topics, formats..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-zinc-950 border border-zinc-800 rounded-xl pl-10 pr-4 py-2 text-xs font-mono text-zinc-200 placeholder-zinc-500 focus:outline-none focus:border-emerald-500"
+              placeholder="Search documents or certificates..."
+              className="w-full bg-white border border-zinc-300 rounded-md pl-9 pr-3.5 py-1.5 text-xs text-zinc-900 placeholder:text-zinc-600 focus:outline-none focus:border-zinc-500"
             />
           </div>
 
-          {/* Categories */}
           <div className="flex flex-wrap items-center gap-1.5 w-full sm:w-auto">
             {categories.map((cat) => (
               <button
                 key={cat}
                 onClick={() => setSelectedCategory(cat)}
-                className={`px-3 py-1.5 rounded-xl text-xs font-mono transition-all ${
+                className={`px-3 py-1 rounded-md text-xs font-medium transition-colors ${
                   selectedCategory === cat
-                    ? 'bg-emerald-500 text-zinc-950 font-bold shadow-sm'
-                    : 'text-zinc-400 hover:text-white hover:bg-zinc-900'
+                    ? 'bg-zinc-900 text-white'
+                    : 'bg-white text-zinc-600 hover:text-zinc-900 border border-zinc-200'
                 }`}
               >
                 {cat}
               </button>
             ))}
           </div>
-
         </div>
 
         {/* Documents Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {filteredDocs.map((doc) => {
-            const docDisplayName = doc.name || doc.fileName || 'Untitled Document';
-            const docFormat = doc.fileType || doc.fileName?.split('.').pop()?.toUpperCase() || 'PDF';
-            const docUrl = doc.externalUrl;
-
-            return (
-              <div
-                key={doc.id}
-                className="bg-[#0d0f14] border border-zinc-800 hover:border-zinc-700 rounded-2xl p-6 flex flex-col justify-between transition-all group"
-              >
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-mono font-bold text-emerald-400 uppercase tracking-wider">
-                      {doc.category}
-                    </span>
-                    <span className="text-[10px] font-mono text-zinc-400 bg-zinc-950 px-2 py-0.5 rounded border border-zinc-800">
-                      {docFormat} {doc.fileSize && `• ${doc.fileSize}`}
-                    </span>
-                  </div>
-
-                  <div>
-                    <h3 className="text-base font-bold text-white group-hover:text-emerald-300 transition-colors leading-snug">
-                      {docDisplayName}
-                    </h3>
-                    <p className="text-xs text-zinc-400 leading-relaxed line-clamp-2 mt-1.5 font-sans">
-                      {doc.description}
-                    </p>
-                  </div>
-
-                  {doc.lastUpdated && (
-                    <div className="text-[10px] text-zinc-400 font-mono">
-                      Updated: {doc.lastUpdated}
-                    </div>
-                  )}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredDocs.map((doc) => (
+            <div
+              key={doc.id}
+              className="bg-[#FAFAFA] border border-zinc-200 rounded-xl p-5 flex flex-col justify-between shadow-xs hover:border-zinc-300 transition-colors"
+            >
+              <div>
+                <div className="flex items-center justify-between text-[11px] text-zinc-500 mb-2">
+                  <span className="font-medium uppercase tracking-wider text-zinc-700 bg-white border border-zinc-200 px-2 py-0.5 rounded">
+                    {doc.category}
+                  </span>
+                  <span>{doc.format || 'PDF'} · {doc.size || '350 KB'}</span>
                 </div>
 
-                <div className="pt-4 mt-4 border-t border-zinc-800/80 flex items-center justify-between gap-2">
-                  <button
-                    onClick={() => {
-                      if (doc.category === 'CV' || doc.category === 'Resume') {
-                        onOpenCvModal();
-                      } else {
-                        setPreviewDoc(doc);
-                      }
-                    }}
-                    className="w-full bg-zinc-950 hover:bg-zinc-900 text-zinc-200 border border-zinc-800 py-2.5 px-3 rounded-xl text-xs font-mono font-semibold flex items-center justify-center gap-2 transition-colors"
-                  >
-                    <Eye className="w-3.5 h-3.5 text-emerald-400" />
-                    <span>PREVIEW</span>
-                  </button>
+                <h3 className="text-base font-semibold text-zinc-900 mt-2">
+                  {doc.name}
+                </h3>
 
-                  {docUrl ? (
-                    <a
-                      href={docUrl}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="p-2.5 rounded-xl bg-zinc-950 hover:bg-zinc-900 text-zinc-400 hover:text-white border border-zinc-800 transition-colors"
-                      title="Open Resource"
-                    >
-                      <ExternalLink className="w-4 h-4" />
-                    </a>
-                  ) : (
-                    <button
-                      onClick={() => {
-                        if (doc.category === 'CV' || doc.category === 'Resume') {
-                          onOpenCvModal();
-                        } else {
-                          setPreviewDoc(doc);
-                        }
-                      }}
-                      className="p-2.5 rounded-xl bg-zinc-950 hover:bg-zinc-900 text-zinc-400 hover:text-white border border-zinc-800 transition-colors"
-                      title="View Document"
-                    >
-                      <Download className="w-4 h-4" />
-                    </button>
-                  )}
+                <p className="text-xs text-zinc-600 mt-1.5 line-clamp-2 leading-relaxed">
+                  {doc.description || 'Verified dossier document available for review and download.'}
+                </p>
+
+                <div className="text-[11px] text-zinc-600 mt-2 font-mono">
+                  {doc.fileName || 'document.pdf'}
                 </div>
-
               </div>
-            );
-          })}
-        </div>
 
+              <div className="mt-5 pt-3 border-t border-zinc-200/80 flex items-center justify-between gap-2">
+                <button
+                  onClick={() => setPreviewDoc(doc)}
+                  className="flex-1 bg-white hover:bg-zinc-50 text-zinc-700 border border-zinc-200 px-3 py-1.5 rounded text-xs font-medium flex items-center justify-center gap-1.5 transition-colors"
+                >
+                  <Eye className="w-3.5 h-3.5" />
+                  <span>View</span>
+                </button>
+
+                <button
+                  onClick={() => handleDownloadDoc(doc)}
+                  className="flex-1 bg-zinc-900 hover:bg-black text-white px-3 py-1.5 rounded text-xs font-medium flex items-center justify-center gap-1.5 transition-colors"
+                >
+                  <Download className="w-3.5 h-3.5" />
+                  <span>Download</span>
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
 
-      {/* Document In-App Preview Modal */}
+      {/* Document Preview Modal */}
       {previewDoc && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-sm animate-in fade-in-50"
-          onClick={() => setPreviewDoc(null)}
-        >
-          <div
-            onClick={(e) => e.stopPropagation()}
-            className="w-full max-w-3xl bg-[#0d0f14] border border-zinc-800 rounded-3xl p-6 sm:p-8 shadow-2xl flex flex-col max-h-[85vh]"
-          >
-            <div className="flex items-center justify-between pb-4 border-b border-zinc-800">
-              <div className="space-y-1">
-                <span className="text-[10px] font-mono text-emerald-400 uppercase tracking-widest font-bold">
-                  {previewDoc.category} // ARCHIVE PREVIEW
-                </span>
-                <h3 className="font-display text-xl font-bold text-white">
-                  {previewDoc.name || previewDoc.fileName}
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs">
+          <div className="bg-white border border-zinc-200 rounded-xl max-w-3xl w-full max-h-[85vh] flex flex-col shadow-xl overflow-hidden">
+            <div className="px-6 py-4 border-b border-zinc-200 flex items-center justify-between">
+              <div>
+                <h3 className="text-base font-semibold text-zinc-900">
+                  {previewDoc.name}
                 </h3>
+                <p className="text-xs text-zinc-500 mt-0.5">
+                  {previewDoc.category} · {previewDoc.fileName}
+                </p>
               </div>
               <button
                 onClick={() => setPreviewDoc(null)}
-                className="p-2 rounded-xl text-zinc-400 hover:text-white hover:bg-zinc-800 border border-zinc-800"
+                className="text-zinc-400 hover:text-zinc-700 p-1.5 rounded-md hover:bg-zinc-100"
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
 
-            <div className="p-6 my-4 bg-zinc-950 border border-zinc-800 rounded-2xl overflow-y-auto text-xs sm:text-sm text-zinc-200 leading-relaxed font-sans whitespace-pre-wrap">
-              <div className="text-center py-10 space-y-3">
-                <FileText className="w-12 h-12 text-emerald-400 mx-auto opacity-80" />
-                <h4 className="font-display text-base font-bold text-white">
-                  {previewDoc.name || previewDoc.fileName}
-                </h4>
-                <p className="text-xs text-zinc-400 max-w-lg mx-auto">
-                  {previewDoc.description}
-                </p>
-                <div className="flex flex-wrap items-center justify-center gap-2 pt-2 text-[11px] font-mono text-zinc-500">
-                  <span>Version: {previewDoc.currentVersion || '1.0'}</span>
-                  <span>•</span>
-                  <span>Source: {previewDoc.source}</span>
-                  {previewDoc.fileSize && (
-                    <>
-                      <span>•</span>
-                      <span>Size: {previewDoc.fileSize}</span>
-                    </>
-                  )}
+            <div className="p-6 overflow-y-auto flex-1 bg-[#FAFAFA]">
+              {previewDoc.content ? (
+                <div className="bg-white border border-zinc-200 p-6 rounded-md text-xs sm:text-sm text-zinc-800 font-mono whitespace-pre-wrap leading-relaxed shadow-2xs">
+                  {previewDoc.content}
                 </div>
-              </div>
+              ) : (
+                <div className="p-8 text-center text-zinc-600 bg-white border border-zinc-200 rounded-md">
+                  <FileText className="w-12 h-12 text-zinc-400 mx-auto mb-3" />
+                  <div className="text-sm font-semibold text-zinc-900">PDF Document Ready</div>
+                  <p className="text-xs text-zinc-500 mt-1 max-w-sm mx-auto">
+                    {previewDoc.name} is stored in verified document storage. Click below to download or view in a new tab.
+                  </p>
+                </div>
+              )}
             </div>
 
-            <div className="flex items-center justify-between pt-3 border-t border-zinc-800">
-              <div className="text-xs text-zinc-400 font-mono">
-                {previewDoc.lastUpdated && `Last revised: ${previewDoc.lastUpdated}`}
-              </div>
-              <div className="flex items-center gap-3">
-                {previewDoc.externalUrl && (
-                  <a
-                    href={previewDoc.externalUrl}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="bg-zinc-900 hover:bg-zinc-800 text-zinc-200 px-4 py-2 rounded-xl text-xs font-mono flex items-center gap-2 transition-colors border border-zinc-800"
-                  >
-                    <ExternalLink className="w-3.5 h-3.5 text-emerald-400" />
-                    <span>OPEN SOURCE LINK</span>
-                  </a>
-                )}
+            <div className="px-6 py-3 border-t border-zinc-200 bg-white flex items-center justify-between">
+              {previewDoc.content && (
+                <button
+                  onClick={() => handleCopyContent(previewDoc.content)}
+                  className="text-xs text-zinc-700 hover:text-black border border-zinc-300 px-3 py-1.5 rounded bg-white hover:bg-zinc-50 flex items-center gap-1.5"
+                >
+                  {copied ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
+                  <span>{copied ? 'Copied' : 'Copy Content'}</span>
+                </button>
+              )}
+              <div className="flex items-center gap-2 ml-auto">
+                <button
+                  onClick={() => handleDownloadDoc(previewDoc)}
+                  className="bg-zinc-900 hover:bg-black text-white px-4 py-1.5 rounded text-xs font-medium flex items-center gap-1.5"
+                >
+                  <Download className="w-3.5 h-3.5" />
+                  <span>Download</span>
+                </button>
                 <button
                   onClick={() => setPreviewDoc(null)}
-                  className="bg-emerald-500 hover:bg-emerald-400 text-zinc-950 px-4 py-2 rounded-xl text-xs font-mono font-bold transition-colors"
+                  className="text-xs font-medium text-zinc-700 hover:text-black px-4 py-1.5 rounded border border-zinc-300 bg-white hover:bg-zinc-50"
                 >
-                  CLOSE
+                  Close
                 </button>
               </div>
             </div>

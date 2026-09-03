@@ -1,154 +1,106 @@
 import React from 'react';
 import { usePortfolio } from '../context/PortfolioContext';
 import {
-  Database,
-  LineChart,
-  BarChart2,
-  Workflow,
-  Sparkles,
-  ArrowRight,
-  ShieldCheck,
   CheckCircle2,
+  Database,
+  BarChart2,
+  Sparkles,
+  TrendingUp,
 } from 'lucide-react';
 
 export const About: React.FC = () => {
   const { data } = usePortfolio();
-  const { profile } = data;
 
-  const corePillars = [
+  const operatingPrinciples = [
     {
-      tag: '01 / EXTRACTION & HYGIENE',
-      title: 'SQL & Relational Analytics',
-      desc: 'Writing optimized relational queries, CTEs, and window functions to extract clean, reliable data from disparate operational schemas.',
+      title: 'Accuracy Over Assumption',
+      desc: 'Every KPI and recommendation is validated against verified relational data and business operational logs.',
     },
     {
-      tag: '02 / DIMENSIONAL MODELING',
-      title: 'Power BI & BI Architecture',
-      desc: 'Building scalable star-schema data models and dynamic DAX measures that turn transactions into actionable retention and revenue metrics.',
+      title: 'Speed to Clarity',
+      desc: 'Automating pipelines to eliminate reporting latency so leadership can make timely, informed decisions.',
     },
     {
-      tag: '03 / DECISION GOVERNANCE',
-      title: 'Performance & Planning Governance',
-      desc: 'Engineering budget vs. actual variance systems, forecasting frameworks, and executive scorecards that cut turnaround times by 35%.',
+      title: 'Human-Centered Impact',
+      desc: 'Translating quantitative findings into real behavioral change, whether in corporate strategy or social research.',
     },
   ];
 
   return (
-    <section id="about" className="py-24 relative bg-[#08090c] border-t border-zinc-900">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
+    <section id="about" className="py-20 bg-white border-b border-zinc-200">
+      <div className="max-w-6xl mx-auto px-6 sm:px-8">
         {/* Section Label */}
-        <div className="flex items-center gap-3 text-xs font-mono text-zinc-400 uppercase tracking-widest mb-6">
-          <span className="w-2 h-2 rounded-full bg-emerald-400" />
-          <span>PHILOSOPHY & BACKGROUND</span>
-          <span className="text-zinc-600">//</span>
-          <span className="text-zinc-400">01</span>
-        </div>
+        <span className="text-xs font-semibold uppercase tracking-wider text-zinc-500 mb-2 block">
+          ABOUT ABIODUN
+        </span>
 
-        {/* Big Editorial Headline */}
-        <div className="max-w-4xl mb-16">
-          <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-[1.05]">
-            "I WORK WHERE <br />
-            <span className="text-emerald-400">DATA MEETS</span> BUSINESS DECISIONS."
-          </h2>
-        </div>
+        {/* Section Heading */}
+        <h2 className="text-3xl sm:text-4xl font-semibold tracking-tight text-zinc-900 mb-12">
+          A little about me.
+        </h2>
 
-        {/* Two-Column Editorial Narrative */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start pb-16 border-b border-zinc-900">
-          
-          {/* Main Narrative Column */}
-          <div className="lg:col-span-7 space-y-6 text-zinc-300 font-sans text-base sm:text-lg leading-relaxed">
-            <p className="text-white font-medium">
-              Over the past 5+ years, my career has evolved across frontline customer operations, digital project management, and high-impact commercial analytics.
+        {/* Two-Column Layout */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
+          {/* Left Column: Story & Journey */}
+          <div className="lg:col-span-7 space-y-5 text-zinc-700 leading-relaxed text-sm sm:text-base">
+            <p className="text-zinc-900 font-medium text-base sm:text-lg">
+              Over the past 5+ years, my career has spanned customer engagement, operations management, and high-impact commercial analytics at MultiChoice Group.
             </p>
             <p>
-              I specialize in bridging the gap between raw database tables and executive strategy. By combining rigorous <strong className="text-white font-semibold">SQL</strong> querying, dimensional <strong className="text-white font-semibold">Power BI</strong> modeling, and disciplined <strong className="text-white font-semibold">Performance & Planning</strong> analysis, I transform ambiguous business questions into clear, quantifiable answers.
+              I bridge the gap between raw data tables and strategic business decisions. By pairing rigorous <strong className="text-zinc-900 font-semibold">SQL</strong> data extraction with modern <strong className="text-zinc-900 font-semibold">Power BI</strong> dashboarding and disciplined <strong className="text-zinc-900 font-semibold">Performance & Planning</strong> analysis, I turn fragmented operational numbers into actionable intelligence.
             </p>
-            <p className="text-zinc-400 text-sm sm:text-base">
-              Whether conducting statistical research on student behaviour or orchestrating 135% sales surges during national campaigns like Showmax 2.0, I focus on measurable outcomes: faster reporting cycles, reliable forecasts, and transparent operational governance.
+            <p>
+              I am also vast in contemporary <strong className="text-zinc-900 font-semibold">AI tooling</strong>—leveraging prompt engineering and AI-assisted workflows to accelerate ETL cycles and produce intelligent reporting dashboards.
+            </p>
+            <p className="text-zinc-600">
+              Beyond commercial enterprise systems, I am passionate about social impact. I serve as both an Analyst and a Psychologist for <strong className="text-zinc-900">GamblePause Africa</strong> (currently active in 3 countries and expanding), conducting research and counseling clients, and I lead data and career initiatives as a <strong className="text-zinc-900">NOUN Cowrywise Ambassador</strong>.
             </p>
 
-            <div className="pt-2 flex flex-wrap gap-4 text-xs font-mono text-zinc-400">
-              <span className="bg-zinc-900 px-3 py-1.5 rounded-lg border border-zinc-800 text-zinc-300">
-                SQL / CTEs / Window Functions
+            <div className="pt-3 flex flex-wrap gap-2 text-xs">
+              <span className="bg-zinc-100 text-zinc-700 px-3 py-1.5 rounded-md border border-zinc-200/80">
+                SQL & Data Hygiene
               </span>
-              <span className="bg-zinc-900 px-3 py-1.5 rounded-lg border border-zinc-800 text-zinc-300">
-                Power BI / DAX / Tabular Models
+              <span className="bg-zinc-100 text-zinc-700 px-3 py-1.5 rounded-md border border-zinc-200/80">
+                Power BI & Reporting
               </span>
-              <span className="bg-zinc-900 px-3 py-1.5 rounded-lg border border-zinc-800 text-zinc-300">
+              <span className="bg-zinc-100 text-zinc-700 px-3 py-1.5 rounded-md border border-zinc-200/80">
                 Variance & Capacity Planning
+              </span>
+              <span className="bg-zinc-100 text-zinc-700 px-3 py-1.5 rounded-md border border-zinc-200/80">
+                AI Analytics & Workflows
               </span>
             </div>
           </div>
 
-          {/* Right Column: Architectural Highlights */}
-          <div className="lg:col-span-5 space-y-4">
-            <div className="bg-[#0d0f14] border border-zinc-800 rounded-3xl p-7 shadow-xl">
-              <div className="text-xs font-mono text-emerald-400 uppercase tracking-wider mb-4 pb-3 border-b border-zinc-800 flex items-center justify-between">
-                <span>OPERATING PRINCIPLES</span>
-                <span className="text-zinc-400 font-normal">[VERIFIED]</span>
+          {/* Right Column: Professional Highlights Card */}
+          <div className="lg:col-span-5">
+            <div className="bg-[#FAFAFA] border border-zinc-200 rounded-xl p-6 sm:p-7 shadow-xs">
+              <div className="text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-4 pb-3 border-b border-zinc-200">
+                Core Operating Principles
               </div>
 
               <div className="space-y-5">
-                <div className="space-y-1">
-                  <div className="text-sm font-bold text-white flex items-center gap-2">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-                    Accuracy Over Assumption
+                {operatingPrinciples.map((item, idx) => (
+                  <div key={idx} className="space-y-1">
+                    <div className="text-sm font-semibold text-zinc-900 flex items-center gap-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-zinc-800" />
+                      <span>{item.title}</span>
+                    </div>
+                    <p className="text-xs text-zinc-600 leading-relaxed pl-3.5">
+                      {item.desc}
+                    </p>
                   </div>
-                  <p className="text-xs text-zinc-400 leading-relaxed pl-3.5">
-                    Every metric is verified against underlying relational sources and transactional logs.
-                  </p>
-                </div>
+                ))}
+              </div>
 
-                <div className="space-y-1">
-                  <div className="text-sm font-bold text-white flex items-center gap-2">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-                    Speed Through Automation
-                  </div>
-                  <p className="text-xs text-zinc-400 leading-relaxed pl-3.5">
-                    Eliminating repetitive manual exports through structured pipelines, reducing report cycle times by 35%.
-                  </p>
-                </div>
-
-                <div className="space-y-1">
-                  <div className="text-sm font-bold text-white flex items-center gap-2">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-                    Clarity at the Executive Level
-                  </div>
-                  <p className="text-xs text-zinc-400 leading-relaxed pl-3.5">
-                    Designing executive dashboards that highlight actionable variances rather than cognitive overload.
-                  </p>
-                </div>
+              <div className="mt-6 pt-5 border-t border-zinc-200 text-xs text-zinc-500 flex items-center justify-between">
+                <span>Location: Lagos, Nigeria</span>
+                <span className="text-zinc-900 font-medium">Open to Collaboration</span>
               </div>
             </div>
           </div>
-
         </div>
-
-        {/* Capability Triad */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-16">
-          {corePillars.map((pillar, idx) => (
-            <div
-              key={idx}
-              className="p-6 rounded-2xl bg-zinc-900/30 border border-zinc-800/80 hover:border-emerald-500/40 transition-colors flex flex-col justify-between space-y-4 group"
-            >
-              <div className="space-y-2">
-                <div className="text-[10px] font-mono text-emerald-400 tracking-wider">
-                  {pillar.tag}
-                </div>
-                <h3 className="text-lg font-bold text-white group-hover:text-emerald-300 transition-colors">
-                  {pillar.title}
-                </h3>
-                <p className="text-xs text-zinc-400 leading-relaxed">
-                  {pillar.desc}
-                </p>
-              </div>
-            </div>
-          ))}
-        </div>
-
       </div>
     </section>
   );
 };
-

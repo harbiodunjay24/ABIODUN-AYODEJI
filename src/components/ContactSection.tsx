@@ -7,28 +7,40 @@ import {
   Linkedin,
   Send,
   CheckCircle2,
-  FileText,
-  ArrowUpRight,
+  Copy,
+  Check,
 } from 'lucide-react';
 
 interface ContactSectionProps {
   onOpenCvModal: () => void;
 }
 
-export const ContactSection: React.FC<ContactSectionProps> = ({ onOpenCvModal }) => {
+export const ContactSection: React.FC<ContactSectionProps> = () => {
   const { data } = usePortfolio();
   const { profile } = data;
 
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    company: '',
-    subject: 'Recruitment & Job Opportunity',
+    subject: 'Job Opportunity',
     message: '',
   });
 
   const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
   const [responseMsg, setResponseMsg] = useState('');
+  const [copiedEmail, setCopiedEmail] = useState(false);
+  const [copiedPhone, setCopiedPhone] = useState(false);
+
+  const handleCopy = (type: 'email' | 'phone', val: string) => {
+    navigator.clipboard.writeText(val);
+    if (type === 'email') {
+      setCopiedEmail(true);
+      setTimeout(() => setCopiedEmail(false), 2000);
+    } else {
+      setCopiedPhone(true);
+      setTimeout(() => setCopiedPhone(false), 2000);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -47,260 +59,240 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onOpenCvModal })
       }
 
       setStatus('success');
-      setResponseMsg(json.message || 'Thank you. Your message has been dispatched successfully.');
+      setResponseMsg(json.message || 'Thank you. Your message has been sent successfully.');
       setFormData({
         name: '',
         email: '',
-        company: '',
-        subject: 'Recruitment & Job Opportunity',
+        subject: 'Job Opportunity',
         message: '',
       });
     } catch (err: any) {
       setStatus('error');
-      setResponseMsg(err.message || 'Something went wrong. Please reach out directly via email.');
+      setResponseMsg(err.message || 'Message noted. Please also feel free to email directly.');
     }
   };
 
   return (
-    <section id="contact" className="py-24 relative bg-[#08090c] border-t border-zinc-900">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
-        {/* Section Tag */}
-        <div className="flex items-center gap-3 text-xs font-mono text-zinc-400 uppercase tracking-widest mb-6">
-          <span className="w-2 h-2 rounded-full bg-emerald-400" />
-          <span>DIRECT INQUIRIES & ENGAGEMENTS</span>
-          <span className="text-zinc-600">//</span>
-          <span className="text-zinc-400">07</span>
-        </div>
+    <section id="contact" className="py-20 bg-white border-b border-zinc-200">
+      <div className="max-w-6xl mx-auto px-6 sm:px-8">
+        {/* Section Label */}
+        <span className="text-xs font-semibold uppercase tracking-wider text-zinc-500 mb-2 block">
+          LET'S CONNECT
+        </span>
 
         {/* Section Header */}
         <div className="mb-12">
-          <h2 className="font-display text-4xl sm:text-5xl font-extrabold text-white tracking-tight">
-            INITIATE DIALOGUE
+          <h2 className="text-3xl sm:text-4xl font-semibold tracking-tight text-zinc-900">
+            Get in touch.
           </h2>
-          <p className="text-zinc-400 text-sm sm:text-base max-w-2xl mt-2 font-normal">
-            Direct channel for recruitment discussions, BI consultations, performance modeling advisory, and data collaborations.
+          <p className="text-sm sm:text-base text-zinc-600 mt-2 max-w-xl">
+            I'm always open to discussing new opportunities, data projects or analytical collaborations.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
-          
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
           {/* Left Column: Direct Coordinates */}
           <div className="lg:col-span-5 space-y-6">
-            
-            <div className="bg-[#0d0f14] border border-zinc-800 rounded-3xl p-6 sm:p-8 space-y-6 shadow-xl">
-              
-              <div className="flex items-center justify-between pb-4 border-b border-zinc-900">
-                <span className="text-[10px] font-mono text-emerald-400 uppercase tracking-widest font-bold">
-                  AVAILABILITY STATUS
+            <div className="bg-[#FAFAFA] border border-zinc-200 rounded-xl p-6 sm:p-7 shadow-xs space-y-6">
+              <div>
+                <span className="text-xs font-semibold uppercase tracking-wider text-zinc-500 block mb-1">
+                  Availability
                 </span>
-                <span className="flex items-center gap-1.5 text-xs text-emerald-400 font-mono">
-                  <span className="w-2 h-2 rounded-full bg-emerald-400" />
-                  AVAILABLE
-                </span>
+                <div className="flex items-center gap-2 text-sm font-semibold text-zinc-900">
+                  <span className="w-2 h-2 rounded-full bg-emerald-500" />
+                  <span>Currently available for full-time roles & contracts</span>
+                </div>
               </div>
 
-              <div className="space-y-2">
-                <h3 className="text-lg font-bold text-white">
-                  Open for Full-Time & Advisory Roles
-                </h3>
-                <p className="text-xs text-zinc-400 font-sans leading-relaxed">
-                  Data Analyst • Business Intelligence • Performance & Planning roles globally (Remote or Hybrid).
-                </p>
-              </div>
-
-              <div className="flex flex-col gap-3 text-xs">
-                <a
-                  href={`mailto:${profile.email}`}
-                  className="flex items-center justify-between p-4 rounded-2xl bg-zinc-950 border border-zinc-800/80 text-zinc-200 hover:text-emerald-400 hover:border-zinc-700 transition-colors group"
-                >
-                  <div className="space-y-0.5">
-                    <div className="text-[10px] text-zinc-400 uppercase font-mono">EMAIL COORDINATE</div>
-                    <div className="font-mono text-white text-xs">{profile.email}</div>
+              <div className="space-y-4 pt-4 border-t border-zinc-200">
+                {/* Email Item */}
+                <div className="flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-md bg-white border border-zinc-200 flex items-center justify-center text-zinc-700">
+                      <Mail className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <div className="text-[11px] text-zinc-500">Email Address</div>
+                      <a
+                        href={`mailto:${profile.email}`}
+                        className="text-xs sm:text-sm font-semibold text-zinc-900 hover:text-black transition-colors"
+                      >
+                        {profile.email}
+                      </a>
+                    </div>
                   </div>
-                  <ArrowUpRight className="w-4 h-4 text-zinc-400 group-hover:text-emerald-400 transition-colors" />
-                </a>
-
-                <a
-                  href={`tel:${profile.phone}`}
-                  className="flex items-center justify-between p-4 rounded-2xl bg-zinc-950 border border-zinc-800/80 text-zinc-200 hover:text-emerald-400 hover:border-zinc-700 transition-colors group"
-                >
-                  <div className="space-y-0.5">
-                    <div className="text-[10px] text-zinc-400 uppercase font-mono">TELEPHONE / WHATSAPP</div>
-                    <div className="font-mono text-white text-xs">{profile.phone}</div>
-                  </div>
-                  <ArrowUpRight className="w-4 h-4 text-zinc-400 group-hover:text-emerald-400 transition-colors" />
-                </a>
-
-                <div className="flex items-center justify-between p-4 rounded-2xl bg-zinc-950 border border-zinc-800/80 text-zinc-200">
-                  <div className="space-y-0.5">
-                    <div className="text-[10px] text-zinc-400 uppercase font-mono">GEOGRAPHY & TIMEZONE</div>
-                    <div className="font-sans text-white text-xs">{profile.location} (WAT • GMT+1)</div>
-                  </div>
-                  <MapPin className="w-4 h-4 text-zinc-400" />
+                  <button
+                    onClick={() => handleCopy('email', profile.email)}
+                    className="p-1.5 rounded-md hover:bg-zinc-200 text-zinc-600 transition-colors"
+                    title="Copy Email"
+                  >
+                    {copiedEmail ? <Check className="w-4 h-4 text-emerald-600" /> : <Copy className="w-4 h-4" />}
+                  </button>
                 </div>
 
-                {profile.socialLinks.linkedin && (
-                  <a
-                    href={profile.socialLinks.linkedin}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="flex items-center justify-between p-4 rounded-2xl bg-zinc-950 border border-zinc-800/80 text-zinc-200 hover:text-emerald-400 hover:border-zinc-700 transition-colors group"
-                  >
-                    <div className="space-y-0.5">
-                      <div className="text-[10px] text-zinc-400 uppercase font-mono">LINKEDIN PROFESSIONAL</div>
-                      <div className="font-sans text-white text-xs">linkedin.com/in/abiodunayodeji</div>
+                {/* Phone Item */}
+                <div className="flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-md bg-white border border-zinc-200 flex items-center justify-center text-zinc-700">
+                      <Phone className="w-4 h-4" />
                     </div>
-                    <ArrowUpRight className="w-4 h-4 text-zinc-400 group-hover:text-emerald-400 transition-colors" />
-                  </a>
-                )}
-              </div>
+                    <div>
+                      <div className="text-[11px] text-zinc-500">Phone Number</div>
+                      <a
+                        href={`tel:${profile.phone}`}
+                        className="text-xs sm:text-sm font-semibold text-zinc-900 hover:text-black transition-colors"
+                      >
+                        {profile.phone}
+                      </a>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => handleCopy('phone', profile.phone)}
+                    className="p-1.5 rounded-md hover:bg-zinc-200 text-zinc-600 transition-colors"
+                    title="Copy Phone"
+                  >
+                    {copiedPhone ? <Check className="w-4 h-4 text-emerald-600" /> : <Copy className="w-4 h-4" />}
+                  </button>
+                </div>
 
-              {/* CV Action Button */}
-              <div className="pt-2">
-                <button
-                  onClick={onOpenCvModal}
-                  className="w-full bg-zinc-950 hover:bg-zinc-900 text-zinc-200 border border-zinc-800 py-3 rounded-2xl text-xs font-mono font-bold flex items-center justify-center gap-2 transition-colors"
-                >
-                  <FileText className="w-4 h-4 text-emerald-400" />
-                  <span>REVIEW VERIFIED DOSSIER / CV</span>
-                </button>
-              </div>
+                {/* Location Item */}
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-md bg-white border border-zinc-200 flex items-center justify-center text-zinc-700">
+                    <MapPin className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <div className="text-[11px] text-zinc-500">Location</div>
+                    <div className="text-xs sm:text-sm font-semibold text-zinc-900">
+                      {profile.location}
+                    </div>
+                  </div>
+                </div>
 
+                {/* LinkedIn Item */}
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-md bg-white border border-zinc-200 flex items-center justify-center text-zinc-700">
+                    <Linkedin className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <div className="text-[11px] text-zinc-500">LinkedIn Profile</div>
+                    <a
+                      href={profile.linkedinUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="text-xs sm:text-sm font-semibold text-zinc-900 hover:underline"
+                    >
+                      linkedin.com/in/abiodun-ayodeji
+                    </a>
+                  </div>
+                </div>
+              </div>
             </div>
-
           </div>
 
-          {/* Right Column: Transmission Form */}
+          {/* Right Column: Clean Contact Form */}
           <div className="lg:col-span-7">
-            <div className="bg-[#0d0f14] border border-zinc-800 rounded-3xl p-6 sm:p-8 shadow-xl">
-              
-              <div className="mb-6 space-y-1">
-                <span className="text-[10px] font-mono text-emerald-400 uppercase tracking-widest font-bold">
-                  TRANSMISSION CONSOLE
-                </span>
-                <h3 className="font-display text-2xl font-bold text-white">
-                  Send a Direct Message
-                </h3>
-              </div>
+            <div className="bg-[#FAFAFA] border border-zinc-200 rounded-xl p-6 sm:p-8 shadow-xs">
+              <h3 className="text-base font-semibold text-zinc-900 mb-1">
+                Send a Direct Message
+              </h3>
+              <p className="text-xs text-zinc-600 mb-6">
+                Fill in the details below and I'll get back to you promptly.
+              </p>
 
               {status === 'success' ? (
-                <div className="p-8 rounded-2xl bg-zinc-950 border border-emerald-500/40 text-center space-y-4 animate-in fade-in-50">
-                  <div className="w-12 h-12 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center justify-center mx-auto">
-                    <CheckCircle2 className="w-6 h-6" />
-                  </div>
-                  <h4 className="text-base font-bold text-white font-mono">TRANSMISSION DELIVERED</h4>
-                  <p className="text-xs text-zinc-400 max-w-md mx-auto font-sans leading-relaxed">{responseMsg}</p>
+                <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-5 text-center space-y-2">
+                  <CheckCircle2 className="w-8 h-8 text-emerald-600 mx-auto" />
+                  <div className="text-sm font-semibold text-emerald-900">Message Delivered</div>
+                  <p className="text-xs text-emerald-700">{responseMsg}</p>
                   <button
                     onClick={() => setStatus('idle')}
-                    className="mt-2 bg-emerald-500 hover:bg-emerald-400 text-zinc-950 text-xs font-mono font-bold px-5 py-2.5 rounded-xl transition-colors"
+                    className="mt-3 text-xs font-semibold text-emerald-800 hover:underline"
                   >
-                    SEND ANOTHER MESSAGE
+                    Send another message
                   </button>
                 </div>
               ) : (
-                <form onSubmit={handleSubmit} className="space-y-4">
-                  {status === 'error' && (
-                    <div className="p-4 rounded-xl bg-rose-950/40 border border-rose-500/30 text-rose-300 text-xs font-mono">
-                      {responseMsg}
-                    </div>
-                  )}
-
+                <form onSubmit={handleSubmit} className="space-y-4 text-xs sm:text-sm">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-xs font-mono text-zinc-400 uppercase tracking-wider mb-2">
-                        NAME *
+                      <label className="block text-xs font-medium text-zinc-700 mb-1">
+                        Your Name *
                       </label>
                       <input
                         type="text"
                         required
-                        placeholder="e.g. Eleanor Vance"
                         value={formData.name}
                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                        className="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-3 text-xs text-zinc-100 placeholder-zinc-600 focus:outline-none focus:border-emerald-500 font-sans"
+                        placeholder="e.g. Sarah Jenkins"
+                        className="w-full bg-white border border-zinc-300 rounded-md px-3 py-2 text-xs sm:text-sm text-zinc-900 focus:outline-none focus:border-zinc-500"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-xs font-mono text-zinc-400 uppercase tracking-wider mb-2">
-                        EMAIL ADDRESS *
+                      <label className="block text-xs font-medium text-zinc-700 mb-1">
+                        Your Email *
                       </label>
                       <input
                         type="email"
                         required
-                        placeholder="e.g. eleanor@company.com"
                         value={formData.email}
                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                        className="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-3 text-xs text-zinc-100 placeholder-zinc-600 focus:outline-none focus:border-emerald-500 font-sans"
+                        placeholder="sarah@company.com"
+                        className="w-full bg-white border border-zinc-300 rounded-md px-3 py-2 text-xs sm:text-sm text-zinc-900 focus:outline-none focus:border-zinc-500"
                       />
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-xs font-mono text-zinc-400 uppercase tracking-wider mb-2">
-                        ORGANISATION
-                      </label>
-                      <input
-                        type="text"
-                        placeholder="Company / Team name"
-                        value={formData.company}
-                        onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-                        className="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-3 text-xs text-zinc-100 placeholder-zinc-600 focus:outline-none focus:border-emerald-500 font-sans"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-xs font-mono text-zinc-400 uppercase tracking-wider mb-2">
-                        ENGAGEMENT TYPE
-                      </label>
-                      <select
-                        value={formData.subject}
-                        onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
-                        className="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-3 text-xs text-zinc-100 focus:outline-none focus:border-emerald-500 font-sans"
-                      >
-                        <option value="Recruitment & Job Opportunity">Full-Time / Contract Role</option>
-                        <option value="Business Intelligence & Analytics Project">BI / Analytics Engagement</option>
-                        <option value="Performance & Planning Advisory">Performance Planning Advisory</option>
-                        <option value="Volunteering & Community Impact">Social Research Collaboration</option>
-                        <option value="General Professional Inquiry">General Professional Inquiry</option>
-                      </select>
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-xs font-mono text-zinc-400 uppercase tracking-wider mb-2">
-                      MESSAGE CONTENT *
+                    <label className="block text-xs font-medium text-zinc-700 mb-1">
+                      Subject / Purpose
+                    </label>
+                    <select
+                      value={formData.subject}
+                      onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
+                      className="w-full bg-white border border-zinc-300 rounded-md px-3 py-2 text-xs sm:text-sm text-zinc-900 focus:outline-none focus:border-zinc-500"
+                    >
+                      <option value="Job Opportunity">Job Opportunity (Full-time / Contract)</option>
+                      <option value="Project Collaboration">Project Collaboration & Analytics</option>
+                      <option value="Social Impact / Research">Social Impact / GamblePause Africa</option>
+                      <option value="General Inquiry">General Inquiry</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-medium text-zinc-700 mb-1">
+                      Message *
                     </label>
                     <textarea
-                      rows={5}
                       required
-                      placeholder="Specify your inquiry, role requirements, or project scope..."
+                      rows={4}
                       value={formData.message}
                       onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                      className="w-full bg-zinc-950 border border-zinc-800 rounded-xl p-4 text-xs text-zinc-100 placeholder-zinc-600 focus:outline-none focus:border-emerald-500 font-sans"
+                      placeholder="Share project scope, role details, or your inquiry..."
+                      className="w-full bg-white border border-zinc-300 rounded-md p-3 text-xs sm:text-sm text-zinc-900 focus:outline-none focus:border-zinc-500"
                     />
                   </div>
 
+                  {status === 'error' && (
+                    <div className="text-xs text-red-600 bg-red-50 p-2.5 rounded border border-red-200">
+                      {responseMsg}
+                    </div>
+                  )}
+
                   <button
-                    id="btn-submit-contact"
                     type="submit"
                     disabled={status === 'submitting'}
-                    className="w-full bg-emerald-500 hover:bg-emerald-400 disabled:bg-zinc-800 text-zinc-950 disabled:text-zinc-500 py-3.5 rounded-2xl text-xs font-mono font-bold flex items-center justify-center gap-2 transition-all shadow-sm"
+                    className="bg-zinc-900 hover:bg-black disabled:bg-zinc-300 text-white px-5 py-2.5 rounded-md text-xs font-medium flex items-center gap-2 transition-colors shadow-xs"
                   >
-                    <Send className="w-4 h-4" />
-                    <span>{status === 'submitting' ? 'DISPATCHING...' : 'DISPATCH MESSAGE'}</span>
+                    <span>{status === 'submitting' ? 'Sending Message...' : 'Send Message'}</span>
+                    <Send className="w-3.5 h-3.5" />
                   </button>
                 </form>
               )}
-
             </div>
           </div>
-
         </div>
-
       </div>
     </section>
   );
 };
-
