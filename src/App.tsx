@@ -27,6 +27,19 @@ const PortfolioAppContent: React.FC = () => {
   const [selectedProject, setSelectedProject] = useState<ProjectItem | null>(null);
   const [isCoverLetterModalOpen, setIsCoverLetterModalOpen] = useState(false);
 
+  React.useEffect(() => {
+    const handleCheckLoginTrigger = () => {
+      const hash = window.location.hash;
+      const search = window.location.search;
+      if (hash === '#login' || hash === '#admin-login' || search.includes('login=true')) {
+        setIsAdminAuthOpen(true);
+      }
+    };
+    handleCheckLoginTrigger();
+    window.addEventListener('hashchange', handleCheckLoginTrigger);
+    return () => window.removeEventListener('hashchange', handleCheckLoginTrigger);
+  }, []);
+
   // If in admin dashboard mode, render the CMS interface
   if (activeView === 'admin') {
     return <AdminDashboard />;

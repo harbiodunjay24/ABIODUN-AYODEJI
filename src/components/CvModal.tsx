@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { usePortfolio } from '../context/PortfolioContext';
+import { generateCvPdf } from '../utils/pdfGenerator';
 import {
   X,
   Printer,
@@ -11,6 +12,7 @@ import {
   Phone,
   Linkedin,
   ExternalLink,
+  Download,
 } from 'lucide-react';
 
 interface CvModalProps {
@@ -25,8 +27,20 @@ export const CvModal: React.FC<CvModalProps> = ({ isOpen, onClose }) => {
 
   const [copied, setCopied] = useState(false);
   const [viewMode, setViewMode] = useState<'formatted' | 'ats-plaintext'>('formatted');
+  const [downloadingPdf, setDownloadingPdf] = useState(false);
 
   if (!isOpen) return null;
+
+  const handleDownloadPdf = () => {
+    try {
+      setDownloadingPdf(true);
+      generateCvPdf(data);
+    } catch (err) {
+      console.error('Failed to generate PDF:', err);
+    } finally {
+      setTimeout(() => setDownloadingPdf(false), 1200);
+    }
+  };
 
   // ATS Plaintext generator
   const generateAtsPlaintext = () => {
@@ -136,11 +150,23 @@ export const CvModal: React.FC<CvModalProps> = ({ isOpen, onClose }) => {
               </button>
             </div>
 
+            {/* Direct PDF Download */}
+            <button
+              id="btn-download-cv-pdf"
+              onClick={handleDownloadPdf}
+              disabled={downloadingPdf}
+              title="Download Official PDF"
+              className="bg-zinc-900 hover:bg-zinc-800 text-white px-3.5 py-1.5 rounded-lg text-xs font-medium flex items-center gap-1.5 shadow-xs transition-colors disabled:opacity-50"
+            >
+              <Download className="w-3.5 h-3.5" />
+              <span>{downloadingPdf ? 'Generating...' : 'Download PDF'}</span>
+            </button>
+
             {/* Print */}
             <button
               id="btn-print-cv"
               onClick={handlePrint}
-              title="Print Document"
+              title="Print Document (A4)"
               className="p-2 rounded-lg bg-white hover:bg-zinc-100 text-zinc-600 hover:text-zinc-900 border border-zinc-200 transition-colors"
             >
               <Printer className="w-4 h-4" />
@@ -168,7 +194,7 @@ export const CvModal: React.FC<CvModalProps> = ({ isOpen, onClose }) => {
         </div>
 
         {/* Modal Scrollable Document View */}
-        <div className="p-6 sm:p-10 overflow-y-auto bg-white text-zinc-900 space-y-8 font-sans">
+        <div id="cv-printable-content" className="p-6 sm:p-10 overflow-y-auto bg-white text-zinc-900 space-y-8 font-sans">
           {viewMode === 'ats-plaintext' ? (
             <div className="bg-[#FAFAFA] border border-zinc-200 rounded-lg p-6 font-mono text-xs leading-relaxed whitespace-pre-wrap text-zinc-800 select-all">
               {generateAtsPlaintext()}
@@ -192,18 +218,29 @@ export const CvModal: React.FC<CvModalProps> = ({ isOpen, onClose }) => {
                 </div>
 
                 <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-xs text-zinc-600 pt-2">
-                  <span className="flex items-center gap-1.5">
+                  <a
+                    href={`mailto:${profile.email || 'ayodejiharbiodun24@gmail.com'}`}
+                    className="flex items-center gap-1.5 hover:underline hover:text-zinc-900"
+                  >
                     <Mail className="w-3.5 h-3.5 text-zinc-400" />
                     <span>{profile.email}</span>
-                  </span>
-                  <span className="flex items-center gap-1.5">
+                  </a>
+                  <a
+                    href={`tel:${profile.phone || '07054195682'}`}
+                    className="flex items-center gap-1.5 hover:underline hover:text-zinc-900"
+                  >
                     <Phone className="w-3.5 h-3.5 text-zinc-400" />
                     <span>{profile.phone}</span>
-                  </span>
-                  <span className="flex items-center gap-1.5">
+                  </a>
+                  <a
+                    href={profile.socialLinks?.linkedin || profile.linkedinUrl || 'https://www.linkedin.com/in/abiodun-ayodeji24'}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-1.5 hover:underline hover:text-zinc-900"
+                  >
                     <Linkedin className="w-3.5 h-3.5 text-zinc-400" />
-                    <span>{profile.linkedinUrl || 'linkedin.com/in/abiodun-ayodeji'}</span>
-                  </span>
+                    <span>linkedin.com/in/abiodun-ayodeji24</span>
+                  </a>
                 </div>
               </div>
 
@@ -277,6 +314,26 @@ export const CvModal: React.FC<CvModalProps> = ({ isOpen, onClose }) => {
                           </ul>
                         </div>
                       )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Volunteering & Social Impact */}
+              <div>
+                <h2 className="text-xs font-semibold uppercase tracking-wider text-zinc-500 mb-3">
+                  Volunteering, Psychology & Social Impact
+                </h2>
+                <div className="space-y-3">
+                  {(data.volunteering || []).map((v) => (
+                    <div key={v.id} className="text-xs space-y-1">
+                      <div className="flex justify-between items-baseline">
+                        <span className="font-semibold text-zinc-900">
+                          {v.organisation} — <span className="text-zinc-700 font-normal">{v.role}</span>
+                        </span>
+                        <span className="text-zinc-500">{v.dates}</span>
+                      </div>
+                      <p className="text-zinc-600 leading-relaxed text-[11.5px]">{v.description}</p>
                     </div>
                   ))}
                 </div>

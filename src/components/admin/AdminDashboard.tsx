@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { usePortfolio } from '../../context/PortfolioContext';
 import {
   ExperienceItem,
@@ -32,6 +32,9 @@ import {
   ChevronRight,
   ExternalLink,
   ShieldCheck,
+  Mail,
+  MessageSquare,
+  RefreshCw,
 } from 'lucide-react';
 import { formatDirectImageUrl } from '../PhotoModal';
 
@@ -74,6 +77,7 @@ export const AdminDashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState<
     | 'overview'
     | 'profile'
+    | 'inquiries'
     | 'experiences'
     | 'projects'
     | 'skills'
@@ -82,6 +86,47 @@ export const AdminDashboard: React.FC = () => {
     | 'documents'
     | 'settings'
   >('overview');
+
+  interface ContactInquiry {
+    id: string;
+    name: string;
+    email: string;
+    subject: string;
+    message: string;
+    timestamp: string;
+  }
+
+  const [inquiries, setInquiries] = useState<ContactInquiry[]>([]);
+  const [loadingInquiries, setLoadingInquiries] = useState(false);
+
+  const fetchInquiries = async () => {
+    setLoadingInquiries(true);
+    try {
+      const res = await fetch('/api/inquiries');
+      const data = await res.json();
+      if (data.inquiries) {
+        setInquiries(data.inquiries);
+      }
+    } catch (err) {
+      console.error('Failed to load inquiries:', err);
+    } finally {
+      setLoadingInquiries(false);
+    }
+  };
+
+  const deleteInquiry = async (id: string) => {
+    if (!confirm('Remove this message from inquiry records?')) return;
+    try {
+      await fetch(`/api/inquiries/${id}`, { method: 'DELETE' });
+      setInquiries((prev) => prev.filter((item) => item.id !== id));
+    } catch (err) {
+      console.error('Failed to delete inquiry:', err);
+    }
+  };
+
+  useEffect(() => {
+    fetchInquiries();
+  }, []);
 
   const [savedNotice, setSavedNotice] = useState(false);
   const photoFileInputRef = useRef<HTMLInputElement | null>(null);
@@ -201,6 +246,7 @@ export const AdminDashboard: React.FC = () => {
 
   const sidebarItems = [
     { id: 'overview', label: 'Overview & Status', icon: <LayoutDashboard className="w-4 h-4" /> },
+    { id: 'inquiries', label: `Inquiries & Messages (${inquiries.length})`, icon: <Mail className="w-4 h-4" /> },
     { id: 'profile', label: 'Profile & Picture', icon: <User className="w-4 h-4" /> },
     { id: 'documents', label: 'CV & Documents', icon: <FileText className="w-4 h-4" /> },
     { id: 'experiences', label: 'Experiences & Roles', icon: <Briefcase className="w-4 h-4" /> },
@@ -630,6 +676,117 @@ export const AdminDashboard: React.FC = () => {
                 >
                   Save & Publish Live
                 </button>
+              </div>
+            </div>
+          )}
+
+          {/* TAB: INQUIRIES & MESSAGES */}
+          {activeTab === 'inquiries' && (
+            <div className="space-y-6">
+              <div className="flex items-center justify-between pb-4 border-b border-zinc-200">
+                <div>
+                  <h2 className="text-xl font-semibold text-zinc-900">Inquiries & Personal Messages</h2>
+                  <p className="text-xs text-zinc-500 mt-0.5">
+                    Messages submitted through your portfolio contact form, routed to your email.
+                  </p>
+                </div>
+                <button
+                  onClick={fetchInquiries}
+                  disabled={loadingInquiries}
+                  className="bg-white hover:bg-zinc-50 text-zinc-700 border border-zinc-300 px-3 py-1.5 rounded-md text-xs font-medium flex items-center gap-1.5 transition-colors shadow-2xs"
+                >
+                  <RefreshCw className={`w-3.5 h-3.5 ${loadingInquiries ? 'animate-spin' : ''}`} />
+                  <span>Refresh</span>
+                </button>
+              </div>
+
+              {/* Email Routing Info Banner */}
+              <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-800 flex items-center justify-center shrink-0">
+                    <Mail className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <div className="text-xs font-semibold text-emerald-900">
+                      Primary Inbound Email Destination
+                    </div>
+                    <div className="text-xs text-emerald-700 font-mono">
+                      ayodejiharbiodun24@gmail.com
+                    </div>
+                  </div>
+                </div>
+                <span className="text-[11px] bg-emerald-200/80 text-emerald-900 px-2.5 py-1 rounded font-medium">
+                  {inquiries.length} {inquiries.length === 1 ? 'Message Recorded' : 'Messages Recorded'}
+                </span>
+              </div>
+
+              {/* Messages List */}
+              <div className="space-y-4">
+                {inquiries.length === 0 ? (
+                  <div className="p-8 text-center bg-[#FAFAFA] border border-zinc-200 rounded-xl">
+                    <MessageSquare className="w-8 h-8 text-zinc-400 mx-auto mb-2" />
+                    <div className="text-sm font-semibold text-zinc-800">No Inquiries Yet</div>
+                    <p className="text-xs text-zinc-500 mt-1 max-w-sm mx-auto">
+                      When recruiters or visitors use your contact form or send a personal message, it will appear here and in your personal email.
+                    </p>
+                  </div>
+                ) : (
+                  inquiries.map((inq) => (
+                    <div
+                      key={inq.id}
+                      className="p-5 bg-[#FAFAFA] border border-zinc-200 rounded-xl space-y-3 shadow-2xs hover:border-zinc-300 transition-colors"
+                    >
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <span className="text-sm font-semibold text-zinc-900">{inq.name}</span>
+                            <span className="text-xs text-zinc-500 font-mono">({inq.email})</span>
+                          </div>
+                          <div className="text-xs font-medium text-zinc-700 mt-0.5">
+                            Subject: <span className="font-semibold text-zinc-900">{inq.subject}</span>
+                          </div>
+                        </div>
+                        <div className="text-[11px] text-zinc-400">
+                          {new Date(inq.timestamp).toLocaleString()}
+                        </div>
+                      </div>
+
+                      <div className="p-3.5 bg-white border border-zinc-200 rounded-lg text-xs sm:text-sm text-zinc-800 whitespace-pre-wrap leading-relaxed">
+                        {inq.message}
+                      </div>
+
+                      <div className="flex items-center justify-between pt-1">
+                        <div className="flex items-center gap-2">
+                          <a
+                            href={`https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(inq.email)}&su=Re: ${encodeURIComponent(inq.subject)}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="bg-zinc-900 hover:bg-black text-white px-3 py-1.5 rounded-md text-xs font-medium flex items-center gap-1.5 transition-colors shadow-2xs"
+                          >
+                            <Mail className="w-3.5 h-3.5" />
+                            <span>Reply in Gmail</span>
+                          </a>
+
+                          <a
+                            href={`mailto:${inq.email}?subject=Re: ${encodeURIComponent(inq.subject)}`}
+                            className="bg-white hover:bg-zinc-100 text-zinc-700 border border-zinc-300 px-3 py-1.5 rounded-md text-xs font-medium flex items-center gap-1.5 transition-colors"
+                          >
+                            <ExternalLink className="w-3.5 h-3.5 text-zinc-500" />
+                            <span>Reply via Mail Client</span>
+                          </a>
+                        </div>
+
+                        <button
+                          onClick={() => deleteInquiry(inq.id)}
+                          className="p-1.5 text-zinc-400 hover:text-red-600 hover:bg-red-50 rounded-md transition-colors"
+                          title="Delete message"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </div>
+                  ))
+                )}
               </div>
             </div>
           )}

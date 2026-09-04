@@ -134,12 +134,23 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenCvModal, onOpenAdminAuth }
               View CV
             </button>
 
-            {isAdminAuthenticated && (
+            {isAdminAuthenticated ? (
               <button
+                id="btn-nav-admin-panel"
                 onClick={() => setActiveView(activeView === 'admin' ? 'public' : 'admin')}
-                className="text-xs font-medium text-white bg-zinc-900 hover:bg-black px-3 py-1.5 rounded-md transition-colors"
+                className="text-xs font-medium text-white bg-zinc-900 hover:bg-black px-3.5 py-1.5 rounded-md transition-colors flex items-center gap-1.5 shadow-xs"
               >
-                {activeView === 'admin' ? 'Exit Admin' : 'Admin'}
+                <span>{activeView === 'admin' ? 'Exit Admin' : 'Admin Panel'}</span>
+              </button>
+            ) : (
+              <button
+                id="btn-nav-admin-login"
+                onClick={onOpenAdminAuth}
+                className="text-xs font-medium text-zinc-600 hover:text-zinc-900 border border-zinc-200 hover:border-zinc-300 bg-zinc-50 hover:bg-zinc-100 px-3 py-1.5 rounded-md transition-colors flex items-center gap-1.5"
+                title="Admin / Owner Login (Abiodun Ayodeji)"
+              >
+                <Lock className="w-3.5 h-3.5 text-zinc-500" />
+                <span>Admin Login</span>
               </button>
             )}
           </div>

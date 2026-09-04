@@ -42,15 +42,29 @@ export const sanitizePortfolioData = (data: Partial<PortfolioData> | null | unde
       ? 'https://github.com/harbiodunjay24'
       : rawGithub;
 
+  const rawLinkedin = data.profile?.socialLinks?.linkedin || data.profile?.linkedinUrl || '';
+  const cleanLinkedin =
+    !rawLinkedin ||
+    rawLinkedin.endsWith('/abiodun-ayodeji') ||
+    rawLinkedin.endsWith('/abiodun-ayodeji/') ||
+    rawLinkedin === 'https://www.linkedin.com/in/abiodun-ayodeji' ||
+    rawLinkedin === 'www.linkedin.com/in/abiodun-ayodeji'
+      ? 'https://www.linkedin.com/in/abiodun-ayodeji24'
+      : rawLinkedin.startsWith('www.')
+      ? `https://${rawLinkedin}`
+      : rawLinkedin;
+
   const profile = {
     ...defaultPortfolioData.profile,
     ...(data.profile || {}),
     phone: cleanPhone,
     profilePhoto: cleanPhoto,
+    linkedinUrl: cleanLinkedin,
     socialLinks: {
       ...defaultPortfolioData.profile.socialLinks,
       ...(data.profile?.socialLinks || {}),
       github: cleanGithub,
+      linkedin: cleanLinkedin,
     },
     heroKpis:
       Array.isArray(data.profile?.heroKpis) && data.profile.heroKpis.length > 0
@@ -138,18 +152,28 @@ export const sanitizePortfolioData = (data: Partial<PortfolioData> | null | unde
     Array.isArray(data.volunteering) && data.volunteering.length > 0
       ? data.volunteering
       : defaultPortfolioData.volunteering
-  ).map((v, idx) => ({
-    ...v,
-    id: v.id || `vol-${idx}`,
-    organisation: v.organisation || (v as any).organization || 'Community Initiative',
-    role: v.role || 'Volunteer',
-    dates: v.dates || (v as any).period || '2024',
-    description: v.description || '',
-    impactStats: Array.isArray(v.impactStats) ? v.impactStats : [],
-    researchPipeline: Array.isArray(v.researchPipeline) ? v.researchPipeline : [],
-    researchFindings: Array.isArray(v.researchFindings) ? v.researchFindings : [],
-    links: Array.isArray(v.links) ? v.links : [],
-  }));
+  ).map((v, idx) => {
+    const rawOrg = v.organisation || (v as any).organization || 'Community Initiative';
+    const cleanOrg =
+      rawOrg === 'Cowrywise Lagos Ambassador Division'
+        ? 'Lagos Division Ambassador'
+        : rawOrg;
+    return {
+      ...v,
+      id: v.id || `vol-${idx}`,
+      organisation: cleanOrg,
+      role: v.role || 'Volunteer',
+      dates: v.dates || (v as any).period || '2024',
+      description:
+        rawOrg === 'Cowrywise Lagos Ambassador Division'
+          ? 'Active volunteer supporting the Lagos Division Ambassador initiative across Lagos State—facilitating youth empowerment initiatives, civic mobilization, community program metrics, and regional data tracking (distinct and independent from Cowrywise).'
+          : v.description || '',
+      impactStats: Array.isArray(v.impactStats) ? v.impactStats : [],
+      researchPipeline: Array.isArray(v.researchPipeline) ? v.researchPipeline : [],
+      researchFindings: Array.isArray(v.researchFindings) ? v.researchFindings : [],
+      links: Array.isArray(v.links) ? v.links : [],
+    };
+  });
 
   const documents = (
     Array.isArray(data.documents) && data.documents.length > 0
@@ -387,24 +411,22 @@ export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     setDraftData(defaultPortfolioData);
   };
 
-  // Secure admin authentication
+  // Secure admin authentication - restricted exclusively to Abiodun Ayodeji with password 123456
   const loginAdmin = async (email: string, pinOrPass: string): Promise<boolean> => {
-    // Authorized owner is Abiodun Ayodeji (ayodejiharbiodun24@gmail.com)
-    // Allows instant secure entry with owner email, password 'abiodun2026', PIN '2026', or Google single-click
     const normalizedEmail = (email || '').trim().toLowerCase();
     const isOwnerEmail =
+      !normalizedEmail ||
       normalizedEmail === 'ayodejiharbiodun24@gmail.com' ||
       normalizedEmail === 'admin@ayodeji.data' ||
-      normalizedEmail.includes('ayodeji');
+      normalizedEmail === 'abiodun' ||
+      normalizedEmail.includes('ayodeji') ||
+      normalizedEmail.includes('abiodun');
 
-    const cleanPin = (pinOrPass || '').trim();
-    const isValidCred =
-      cleanPin === '2026' ||
-      cleanPin === 'abiodun2026' ||
-      cleanPin === 'admin' ||
-      cleanPin === 'google-oauth-token';
+    const cleanPassword = (pinOrPass || '').trim();
+    // Exclusively authorized password requested by Abiodun
+    const isValidPassword = cleanPassword === '123456';
 
-    if (isOwnerEmail && isValidCred) {
+    if (isOwnerEmail && isValidPassword) {
       const user: AdminUser = {
         email: 'ayodejiharbiodun24@gmail.com',
         name: 'Abiodun Ayodeji',

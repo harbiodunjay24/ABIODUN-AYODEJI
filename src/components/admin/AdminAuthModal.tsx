@@ -8,7 +8,8 @@ import {
   X,
   AlertCircle,
   ArrowRight,
-  Sparkles,
+  Eye,
+  EyeOff,
 } from 'lucide-react';
 
 interface AdminAuthModalProps {
@@ -20,7 +21,8 @@ export const AdminAuthModal: React.FC<AdminAuthModalProps> = ({ isOpen, onClose 
   const { loginAdmin, setActiveView } = usePortfolio();
 
   const [email, setEmail] = useState('ayodejiharbiodun24@gmail.com');
-  const [pinOrPass, setPinOrPass] = useState('2026');
+  const [pinOrPass, setPinOrPass] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -37,25 +39,13 @@ export const AdminAuthModal: React.FC<AdminAuthModalProps> = ({ isOpen, onClose 
         setActiveView('admin');
         onClose();
       } else {
-        setError('Invalid authentication credentials. Enter authorized administrator email and PIN (2026).');
+        setError('Access denied. Invalid administrator credentials.');
       }
     } catch (err: any) {
-      setError(err.message || 'Authentication error');
+      setError(err.message || 'Authentication error occurred.');
     } finally {
       setLoading(false);
     }
-  };
-
-  const handleQuickDemoAccess = async () => {
-    setEmail('ayodejiharbiodun24@gmail.com');
-    setPinOrPass('2026');
-    setLoading(true);
-    const success = await loginAdmin('ayodejiharbiodun24@gmail.com', '2026');
-    if (success) {
-      setActiveView('admin');
-      onClose();
-    }
-    setLoading(false);
   };
 
   return (
@@ -77,7 +67,7 @@ export const AdminAuthModal: React.FC<AdminAuthModalProps> = ({ isOpen, onClose 
             </div>
             <div>
               <span className="text-[11px] font-semibold text-zinc-500 uppercase tracking-wider block">
-                ADMINISTRATOR ACCESS
+                PORTFOLIO OWNER ACCESS
               </span>
               <h3 className="text-base font-semibold text-zinc-900">
                 Sign in to Admin Panel
@@ -97,7 +87,7 @@ export const AdminAuthModal: React.FC<AdminAuthModalProps> = ({ isOpen, onClose 
         <div className="p-3.5 rounded-lg bg-[#FAFAFA] border border-zinc-200 text-xs text-zinc-600 flex items-start gap-2.5">
           <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
           <div className="leading-relaxed">
-            Welcome Abiodun. In this portal you can upload documents, update your CV or resume, change your photo, and manage live portfolio data.
+            This administrative dashboard is private and strictly restricted to portfolio owner <strong className="text-zinc-900 font-medium">Abiodun Ayodeji</strong>.
           </div>
         </div>
 
@@ -122,25 +112,35 @@ export const AdminAuthModal: React.FC<AdminAuthModalProps> = ({ isOpen, onClose 
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="ayodejiharbiodun24@gmail.com"
-                className="w-full bg-[#FAFAFA] border border-zinc-300 rounded-md pl-9 pr-3 py-2 text-xs sm:text-sm text-zinc-900 focus:outline-none focus:border-zinc-500 focus:bg-white"
+                className="w-full bg-[#FAFAFA] border border-zinc-300 rounded-md pl-9 pr-3 py-2 text-xs sm:text-sm text-zinc-900 focus:outline-none focus:border-zinc-500 focus:bg-white transition-colors"
+                autoComplete="email"
               />
             </div>
           </div>
 
           <div>
             <label className="block text-xs font-medium text-zinc-700 mb-1">
-              Security PIN or Password
+              Administrator Password
             </label>
             <div className="relative">
               <KeyRound className="w-4 h-4 text-zinc-400 absolute left-3 top-1/2 -translate-y-1/2" />
               <input
-                type="password"
+                type={showPassword ? 'text' : 'password'}
                 required
                 value={pinOrPass}
                 onChange={(e) => setPinOrPass(e.target.value)}
-                placeholder="Enter PIN (Default: 2026)"
-                className="w-full bg-[#FAFAFA] border border-zinc-300 rounded-md pl-9 pr-3 py-2 text-xs sm:text-sm text-zinc-900 focus:outline-none focus:border-zinc-500 focus:bg-white"
+                placeholder="Enter password"
+                className="w-full bg-[#FAFAFA] border border-zinc-300 rounded-md pl-9 pr-10 py-2 text-xs sm:text-sm text-zinc-900 focus:outline-none focus:border-zinc-500 focus:bg-white transition-colors"
+                autoComplete="current-password"
               />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-600 p-0.5"
+                title={showPassword ? 'Hide password' : 'Show password'}
+              >
+                {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+              </button>
             </div>
           </div>
 
@@ -148,24 +148,12 @@ export const AdminAuthModal: React.FC<AdminAuthModalProps> = ({ isOpen, onClose 
             id="btn-admin-login-submit"
             type="submit"
             disabled={loading}
-            className="w-full bg-zinc-900 hover:bg-black disabled:bg-zinc-300 text-white py-2.5 rounded-md text-xs font-medium flex items-center justify-center gap-2 transition-colors shadow-xs"
+            className="w-full bg-zinc-900 hover:bg-black disabled:bg-zinc-300 text-white py-2.5 rounded-md text-xs font-medium flex items-center justify-center gap-2 transition-colors shadow-xs mt-2"
           >
-            <span>{loading ? 'Authenticating...' : 'Sign In to Dashboard'}</span>
+            <span>{loading ? 'Verifying access...' : 'Sign In to Admin Panel'}</span>
             <ArrowRight className="w-4 h-4" />
           </button>
         </form>
-
-        {/* Quick Demo Access Button */}
-        <div className="pt-3 border-t border-zinc-200 flex flex-col gap-2 text-center">
-          <button
-            type="button"
-            onClick={handleQuickDemoAccess}
-            className="text-xs text-zinc-800 hover:text-black bg-zinc-100 hover:bg-zinc-200 border border-zinc-200 py-2 rounded-md transition-colors font-medium flex items-center justify-center gap-2"
-          >
-            <Sparkles className="w-3.5 h-3.5 text-zinc-600" />
-            <span>One-Click Sign In (PIN: 2026)</span>
-          </button>
-        </div>
       </div>
     </div>
   );

@@ -19,7 +19,7 @@ export const defaultPortfolioData: PortfolioData = {
     phone: '07054195682',
     professionalStatus: 'Open to opportunities & analytics collaborations',
     socialLinks: {
-      linkedin: 'https://www.linkedin.com/in/abiodun-ayodeji',
+      linkedin: 'https://www.linkedin.com/in/abiodun-ayodeji24',
       github: 'https://github.com/harbiodunjay24',
       twitter: 'https://x.com/ayodejiharbiodun',
       email: 'mailto:ayodejiharbiodun24@gmail.com',
@@ -479,16 +479,16 @@ export const defaultPortfolioData: PortfolioData = {
     },
     {
       id: 'vol-3',
-      organisation: 'Cowrywise Lagos Ambassador Division',
-      role: 'Data Team Volunteer',
+      organisation: 'Lagos Division Ambassador',
+      role: 'Data & Community Volunteer',
       dates: '2023 – Present',
       description:
-        'Active member of the regional data team supporting Lagos-wide ambassador operations, event attendance analytics, community outreach metrics, and financial literacy campaign reporting.',
+        'Active volunteer supporting the Lagos Division Ambassador initiative across Lagos State—facilitating youth empowerment initiatives, civic mobilization, community program metrics, and regional data tracking (distinct and independent from Cowrywise).',
       impactStats: [
         {
-          value: 'Lagos',
+          value: 'Lagos State',
           label: 'Regional Footprint',
-          detail: 'Providing data support for metro campaigns and youth financial literacy drives.',
+          detail: 'Providing data and civic support for community youth development and mobilization programs across Lagos.',
         },
       ],
     },
@@ -514,7 +514,7 @@ export const defaultPortfolioData: PortfolioData = {
       content: `ABIODUN AYODEJI
 Data Analyst | Performance & Planning Analyst
 Lagos, Nigeria | Phone: +234 705 419 5682 (07054195682) | Email: ayodejiharbiodun24@gmail.com
-LinkedIn: linkedin.com/in/abiodun-ayodeji | GitHub: https://github.com/harbiodunjay24
+LinkedIn: linkedin.com/in/abiodun-ayodeji24 | GitHub: https://github.com/harbiodunjay24
 
 ================================================================================
 PROFESSIONAL SUMMARY
@@ -601,7 +601,7 @@ VERIFIED CERTIFICATIONS
       content: `ABIODUN AYODEJI | EXECUTIVE RESUME
 Data Analyst | Performance & Planning Analyst
 Lagos, Nigeria | +234 705 419 5682 | ayodejiharbiodun24@gmail.com
-LinkedIn: linkedin.com/in/abiodun-ayodeji | GitHub: https://github.com/harbiodunjay24
+LinkedIn: linkedin.com/in/abiodun-ayodeji24 | GitHub: https://github.com/harbiodunjay24
 
 --------------------------------------------------------------------------------
 EXECUTIVE PROFILE
@@ -699,7 +699,7 @@ This credential confirms that Abiodun Ayodeji has successfully met all curriculu
       versionHistory: [],
       content: `Abiodun Ayodeji
 Lagos, Nigeria | +234 705 419 5682 | ayodejiharbiodun24@gmail.com
-GitHub: https://github.com/harbiodunjay24 | LinkedIn: linkedin.com/in/abiodun-ayodeji
+GitHub: https://github.com/harbiodunjay24 | LinkedIn: linkedin.com/in/abiodun-ayodeji24
 
 To: The Hiring Team & Executive Leadership
 Re: Performance & Planning Analyst / Senior Data Analyst Position

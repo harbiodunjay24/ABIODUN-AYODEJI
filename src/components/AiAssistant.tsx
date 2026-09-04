@@ -11,6 +11,13 @@ import {
   FileText,
   ArrowRight,
   HelpCircle,
+  BookOpen,
+  Heart,
+  Plane,
+  Trees,
+  Compass,
+  Smile,
+  Briefcase,
 } from 'lucide-react';
 
 interface Message {
@@ -34,20 +41,31 @@ export const AiAssistant: React.FC<AiAssistantProps> = ({
     {
       role: 'assistant',
       content:
-        "Hello! I am Abiodun's AI assistant, grounded in his verified portfolio. You can ask me about his experience at MultiChoice Group, his Power BI & SQL projects, his research with GamblePause Africa across 3 countries, or his education and certifications.",
+        "Hello! I'm Abiodun Ayodeji. Great to connect with you! Feel free to ask me anything—whether it's about my analytics work at MultiChoice Group and Power BI projects, or fun personal questions like my love for reading, my Christian faith, living in Nigeria, or my passions for nature and travelling!",
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
     },
   ]);
   const [inputQuestion, setInputQuestion] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [copiedIdx, setCopiedIdx] = useState<number | null>(null);
+  const [suggestionCategory, setSuggestionCategory] = useState<'fun' | 'career'>('fun');
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
-  const suggestedQuestions = [
-    'What experience does Abiodun have with Power BI?',
-    'What projects has he worked on?',
-    'What roles is he suited for?',
-    'Tell me about his work at MultiChoice and GamblePause.',
+  const funQuestions = [
+    { text: 'Do you love reading?', icon: BookOpen },
+    { text: 'Tell me about your faith as a Christian', icon: Heart },
+    { text: 'What do you love about nature?', icon: Trees },
+    { text: 'Where do you love travelling?', icon: Plane },
+    { text: 'What is it like living in Nigeria?', icon: Compass },
+    { text: 'What do you do for fun outside of work?', icon: Smile },
+  ];
+
+  const careerQuestions = [
+    { text: 'What experience do you have with Power BI & SQL?', icon: Briefcase },
+    { text: 'Tell me about your work at MultiChoice Group.', icon: Briefcase },
+    { text: 'What is your role with Lagos Division Ambassador?', icon: Briefcase },
+    { text: 'Tell me about GamblePause Africa research', icon: Briefcase },
+    { text: 'How can I get in touch with you?', icon: Send },
   ];
 
   const scrollToBottom = () => {
@@ -99,14 +117,30 @@ export const AiAssistant: React.FC<AiAssistantProps> = ({
       // Friendly local fallback response based on keywords
       const q = query.toLowerCase();
       let fallbackText = '';
-      if (q.includes('power bi') || q.includes('dashboard')) {
-        fallbackText = 'Abiodun is highly proficient in Power BI, building enterprise executive dashboards such as the Showmax 2.0 commercial suite (supporting a 135% subscription surge) and executive KPI variance models cutting reporting cycles by 35%.';
+      if (q === 'what is your name' || q === "what's your name" || q.includes('your name') || q === 'who are you') {
+        fallbackText = "My name is Abiodun Ayodeji. I'm a Data Analyst and Performance & Planning Analyst based in Lagos, Nigeria.";
+      } else if (q.includes('reading') || q.includes('book') || q.includes('read')) {
+        fallbackText = "I love reading! 📚 It is a daily habit of mine. I read widely across leadership, theology and Christian literature, psychology, personal growth, and data strategy. Reading sharpens my analytical thinking and broadens my worldview.";
+      } else if (q.includes('christian') || q.includes('faith') || q.includes('religion') || q.includes('god') || q.includes('church')) {
+        fallbackText = "Yes, I am a devoted Christian! 🙏 My faith in God is the anchor of my life, grounding my values in integrity, purpose, humility, kindness, and excellence in all things.";
+      } else if (q.includes('nature') || q.includes('outdoor') || q.includes('scenery')) {
+        fallbackText = "I deeply love nature! 🌿 Taking quiet walks outdoors, admiring scenic landscapes, and listening to the breeze helps me reset, reflect, and stay mentally inspired away from computer screens.";
+      } else if (q.includes('travel') || q.includes('travelling') || q.includes('places') || q.includes('explore')) {
+        fallbackText = "I love travelling! ✈️ Exploring new cities, experiencing different cultures and cuisines, and connecting with diverse people inspires me and teaches invaluable life lessons.";
+      } else if (q.includes('fun') || q.includes('hobby') || q.includes('hobbies') || q.includes('outside work')) {
+        fallbackText = "Outside of data analytics and Power BI dashboards, I love having fun! ✨ I enjoy reading inspiring books, taking peaceful nature walks, travelling to new locations, listening to uplifting gospel music, having meaningful conversations, and mentoring students.";
+      } else if (q.includes('nigeria') || q.includes('live') || q.includes('location')) {
+        fallbackText = "I live in Lagos, Nigeria! 🇳🇬 I love the vibrant energy and entrepreneurial drive of Nigeria, while collaborating on analytics projects globally.";
+      } else if (q.includes('lagos division') || q.includes('ambassador')) {
+        fallbackText = 'I volunteer for the Lagos Division Ambassador initiative across Lagos State—focused on youth empowerment, community mobilization, and regional data tracking. Please note this is an independent civic initiative, separate and distinct from Cowrywise.';
+      } else if (q.includes('power bi') || q.includes('dashboard')) {
+        fallbackText = 'I am highly proficient in Power BI, building enterprise executive dashboards such as the Showmax 2.0 commercial suite (supporting a 135% subscription surge) and executive KPI variance models cutting reporting cycles by 35%.';
       } else if (q.includes('role') || q.includes('suited') || q.includes('hiring')) {
-        fallbackText = 'Abiodun is well-suited for Data Analyst, Performance & Planning Analyst, and Business Intelligence roles, offering strong competencies in SQL, Power BI, Excel, KPI governance, and commercial forecasting.';
+        fallbackText = 'I am immediately available for Data Analyst, Performance & Planning Analyst, and Business Intelligence roles, offering strong competencies in SQL, Power BI, Excel, KPI governance, and commercial forecasting.';
       } else if (q.includes('gamble') || q.includes('psycholog')) {
-        fallbackText = 'At GamblePause Africa (active in 3 countries and expanding), Abiodun serves as both an Analyst (authoring research across 420 youth respondents) and as a Psychologist providing counseling to individuals dealing with gambling issues.';
+        fallbackText = 'At GamblePause Africa (active in 3 countries and expanding), I serve as both an Analyst (authoring research across 420 youth respondents) and as a Psychologist providing counseling to clients.';
       } else {
-        fallbackText = 'Abiodun Ayodeji has 5+ years of experience across MultiChoice Group in performance planning, commercial analytics, SQL, Power BI, and empirical social impact research. Reach him at ayodejiharbiodun24@gmail.com or 07054195682.';
+        fallbackText = "I'm Abiodun Ayodeji, a Data Analyst with 5+ years of experience across MultiChoice Group in performance planning, commercial analytics, SQL, and Power BI. Reach me directly at ayodejiharbiodun24@gmail.com or 07054195682.";
       }
 
       const botMessage: Message = {
@@ -285,19 +319,54 @@ export const AiAssistant: React.FC<AiAssistantProps> = ({
                 </button>
               </form>
 
-              {/* Suggestions */}
-              <div className="mt-3 flex flex-wrap items-center gap-2">
-                <span className="text-[11px] text-zinc-600 font-medium mr-1">Suggested:</span>
-                {suggestedQuestions.map((q) => (
-                  <button
-                    key={q}
-                    type="button"
-                    onClick={() => handleSendMessage(q)}
-                    className="text-[11px] text-zinc-600 hover:text-zinc-900 bg-zinc-100 hover:bg-zinc-200 border border-zinc-200/80 px-2.5 py-1 rounded transition-colors"
-                  >
-                    {q}
-                  </button>
-                ))}
+              {/* Suggestions & Interactive Topics */}
+              <div className="mt-3.5 space-y-2.5">
+                <div className="flex items-center justify-between gap-2 border-b border-zinc-100 pb-2">
+                  <div className="flex items-center gap-1.5">
+                    <button
+                      type="button"
+                      onClick={() => setSuggestionCategory('fun')}
+                      className={`text-xs font-medium px-2.5 py-1 rounded-md transition-colors flex items-center gap-1.5 ${
+                        suggestionCategory === 'fun'
+                          ? 'bg-zinc-900 text-white shadow-xs'
+                          : 'text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100'
+                      }`}
+                    >
+                      <Sparkles className="w-3 h-3 text-amber-300" />
+                      <span>Fun & Passions</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setSuggestionCategory('career')}
+                      className={`text-xs font-medium px-2.5 py-1 rounded-md transition-colors flex items-center gap-1.5 ${
+                        suggestionCategory === 'career'
+                          ? 'bg-zinc-900 text-white shadow-xs'
+                          : 'text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100'
+                      }`}
+                    >
+                      <Briefcase className="w-3 h-3 text-blue-400" />
+                      <span>Career & Analytics</span>
+                    </button>
+                  </div>
+                  <span className="text-[11px] text-zinc-500 hidden sm:inline">Click to ask directly</span>
+                </div>
+
+                <div className="flex flex-wrap items-center gap-2">
+                  {(suggestionCategory === 'fun' ? funQuestions : careerQuestions).map((item) => {
+                    const IconComponent = item.icon;
+                    return (
+                      <button
+                        key={item.text}
+                        type="button"
+                        onClick={() => handleSendMessage(item.text)}
+                        className="text-xs text-zinc-700 hover:text-zinc-900 bg-zinc-50 hover:bg-zinc-100 border border-zinc-200/90 hover:border-zinc-300 px-3 py-1.5 rounded-md transition-all flex items-center gap-1.5 active:scale-95"
+                      >
+                        <IconComponent className="w-3.5 h-3.5 text-zinc-500" />
+                        <span>{item.text}</span>
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
             </div>
           </div>

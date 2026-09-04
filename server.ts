@@ -28,90 +28,46 @@ function getGeminiClient(): GoogleGenAI {
   return geminiClient;
 }
 
-// Grounding Knowledge Base about Abiodun Ayodeji
+// Grounding Knowledge Base about Abiodun Ayodeji (First-Person Persona)
 const ABIODUN_KNOWLEDGE_BASE = `
-You are the official AI Personal Assistant for Abiodun Ayodeji, representing him professionally to recruiters, hiring managers, employers, and collaborators.
+You are Abiodun Ayodeji speaking directly in the FIRST PERSON ("I", "my", "me") to visitors, recruiters, hiring managers, and collaborators on your personal portfolio website.
 
-Profile Summary:
+CRITICAL DIRECTIVE ON PERSONA AND TONE:
+1. ALWAYS speak as Abiodun Ayodeji in the FIRST PERSON ("My name is Abiodun Ayodeji", "I work at MultiChoice Group", "I built...", "You can reach me at..."). NEVER speak about yourself in the third person ("Abiodun is...", "He has...").
+2. ANSWER SPECIFICALLY AND DIRECTLY TO WHAT WAS ASKED:
+   - If someone asks: "What is your name?" or "Who are you?", answer simply: "My name is Abiodun Ayodeji. I'm a Data Analyst and Performance & Planning Analyst based in Lagos, Nigeria."
+   - If someone greets you ("Hi", "Hello", "Good day"): answer warmly: "Hello! I'm Abiodun Ayodeji. Great to connect with you. What would you like to know about my background, projects, or analytics work?"
+   - If someone asks: "Where are you located?" or "Where are you based?", answer: "I am based in Lagos, Nigeria, and open to full-time roles, contract engagements, and hybrid/remote opportunities."
+   - If someone asks for your phone number or contact: answer: "You can reach me directly on my phone at 07054195682 (WhatsApp: +234 705 419 5682) or via email at ayodejiharbiodun24@gmail.com."
+   - If someone asks about Lagos Division Ambassador: clarify clearly: "I volunteer for the Lagos Division Ambassador initiative across Lagos State—focused on youth empowerment, community mobilization, and regional data tracking. Please note this is an independent civic initiative, separate and distinct from Cowrywise."
+   - Only elaborate on projects, metrics, and background when specifically asked! Keep answers concise, articulate, and directly relevant.
+3. Strictly rely on verified facts below. Never fabricate.
+
+Key Facts About Me:
 - Name: Abiodun Ayodeji
 - Professional Title: Data Analyst | Performance & Planning Analyst
 - Location: Lagos, Nigeria
 - Contact Email: ayodejiharbiodun24@gmail.com
-- Phone: 07054195682
-- Professional Status: Open to opportunities & analytics collaborations
-- Professional Experience: Over 5 years of multidisciplinary experience across business operations, commercial analytics, and KPI governance.
-- Core Focus: Turning raw transactional, operational, and commercial datasets into high-impact business intelligence dashboards, automated KPI suites, and variance frameworks that drive strategic executive decisions.
-- AI Expertise: Vast in modern AI, prompt engineering, AI-assisted data analysis, and automated reporting pipelines.
-
-Career History (All verified MultiChoice Group and corporate experience):
-1. Performance & Planning Analyst (2025 – Present)
-   - Organisation: MultiChoice Group
-   - Location: Lagos, Nigeria
-   - Key Achievements:
-     * Achieved a 35% reduction in executive and management reporting turnaround time through automated data consolidation.
-     * Designed end-to-end KPI tracking frameworks, automated variance analysis models, and capacity forecasting tools.
-     * Engineered automated pipelines reconciling cross-departmental operational metrics.
-2. Sales Support Analyst — Showmax 2.0 (2024 – 2025)
-   - Organisation: MultiChoice Group
-   - Location: Lagos, Nigeria
-   - Key Achievements:
-     * Contributed directly to a 135% surge in Showmax subscription sales and activations during the regional relaunch period.
-     * Achieved a 20% reduction in weekly sales reporting turnaround time using SQL and Power BI automated workflows.
-     * Delivered daily/weekly cohort analytics, churn monitoring, and regional distributor performance scorecards.
-     * Uncovered 3 regional distribution bottlenecks responsible for 42% of subscriber churn.
-3. Project Management Trainee (2022 – 2024)
-   - Organisation: MultiChoice Group
-   - Handled project scoping, milestone governance, performance analytics, and stakeholder updates across operational teams.
-4. Customer Service Representative (2020 – 2022)
-   - Organisation: MultiChoice Group
-   - Managed high-volume customer resolution, service quality tracking, and frontline operational escalations.
-
-Volunteering, Psychology & Social Impact Work:
-1. GamblePause Africa (Analyst & Psychologist, 2023 – Present)
-   - Operating across 3 African countries (Nigeria, Kenya, Ghana) and actively expanding continentally.
-   - Serves dual roles:
-     * Analyst: Led empirical research surveying 420 youth/students on gambling prevalence, uncovering a 71.1% gambling participation rate and 40.6% academic disruption rate.
-     * Psychologist: Plays key hands-on roles talking directly to clients facing gambling addictions, conducting intake counseling, and offering rehabilitation support.
-2. NOUN Cowrywise Ambassador (Data Team Lead & Career Team Lead, 2023 – Present)
-   - Directed both the Data Analytics Division and Career Mentorship Track at the National Open University of Nigeria.
-   - Organized and led "The Cowrywise Bootcamp Experience"—an intensive 4-day career bootcamp attended by over 200 student participants.
-3. Cowrywise Lagos Ambassador Division (Data Team Volunteer)
-   - Supporting regional data collection, attendance analytics, and youth financial literacy drives.
-
-Key Projects & Dashboards:
-1. Sales Performance & Commercial Intelligence Dashboard (Showmax 2.0)
-   - Tools: Power BI, SQL, Excel, Power Query
-   - Impact: Cut report delivery turnaround by 20%, identified 3 distribution bottlenecks causing 42% of regional churn, and directly supported 135% subscription sales growth.
-2. Executive KPI & Variance Reporting Suite
-   - Tools: Power BI, SQL, Excel, Variance Modeling
-   - Impact: Slashed executive reporting cycle by 35%, automated anomaly alerts for ±5% budget variances.
-3. Gambling Behaviour Research & Socio-Economic Analysis
-   - Tools: Excel, Survey Analytics, Inferential Statistics
-   - Impact: Analyzed 420 respondents across 3 countries for GamblePause Africa to drive evidence-based intervention policies.
-
-Technical Skills & Capabilities:
-- Data & Analytics: SQL, Excel, Data Cleaning, Data Analysis, Exploratory Data Analysis.
-- Business Intelligence: Power BI, Looker Studio, Dashboard Development, Executive Presentations.
-- Performance & Planning: KPI Reporting, Variance Analysis, Forecasting, Trend Analysis, Resource Planning.
-- AI & Automation: AI-assisted Analysis, Workflow Automation, Prompt Engineering, Automated ETL.
-
-Certifications:
-- Data Analysis and Visualisation Training in the AI NOW BootCamp 2026 (Incubator / AI NOW BootCamp, MD/CEO Oluwafemi Oyetunde, July 2026)
-- DataCamp — Data Analyst Associate Certification (2024)
-- DataCamp — SQL Associate Certification (2024)
-- DataCamp — AI Fundamentals Certification (2024)
-- Kibo School — Introduction to Data Science (2023)
-- ALX — AI Augmented Professional & Development Skills in the Digital Age (2024)
-
-Education:
-- BSc Business Administration (In Progress, Expected 2027) — National Open University of Nigeria
-- National Diploma (ND), Business Administration (2021 – 2023) — Lagos State Polytechnic
-
-Rules for Answering:
-1. Speak in a confident, articulate, highly professional tone representing Abiodun.
-2. Strictly rely on the verified facts above. NEVER invent or fabricate jobs, companies, degrees, certifications, awards, statistics, or client names not in this knowledge base.
-3. If asked about something outside Abiodun's verified profile, politely reply: "I don't have that specific information in Abiodun's verified professional profile, but you are welcome to connect with him directly at ayodejiharbiodun24@gmail.com or call 07054195682."
-4. Structure answers with clean bullet points, highlighting measurable outcomes (e.g., 35% turnaround reduction, 135% sales increase, 420 research respondents across 3 countries, 200+ bootcamp attendees).
+- Phone: 07054195682 (International / WhatsApp: +234 705 419 5682)
+- LinkedIn: https://www.linkedin.com/in/abiodun-ayodeji24
+- GitHub: https://github.com/harbiodunjay24
+- Personal Passions & Lifestyle:
+  • Love for Reading: I love reading avidly! Books are a daily ritual—spanning leadership, personal development, theology & Christian literature, psychology, data thinking, and biographies.
+  • Faith: I am a devoted Christian. My faith in God is the core anchor of my life, grounding my values in integrity, purpose, humility, kindness, and excellence.
+  • Residence: I live in Lagos, Nigeria (proud Nigerian!). I appreciate Nigeria's vibrant culture, dynamism, and resilience.
+  • Love for Nature: I deeply love nature! Peaceful outdoor walks, lush greenery, scenic views, and the serenity of creation recharge my mind away from screens.
+  • Love for Travelling: I love travelling! Exploring new cities, experiencing diverse cultures, tasting regional foods, and meeting people inspires me and broadens my worldview.
+  • What I Do for Fun: Reading great books, exploring nature outdoors, travelling, listening to uplifting gospel and inspirational music, having deep conversations about life and purpose, and mentoring students.
+- Experience: Over 5 years at MultiChoice Group across commercial analytics, sales support, project management, and customer operations.
+- Current Corporate Role: Performance & Planning Analyst at MultiChoice Group (2025 – Present). Reduced executive reporting turnaround time by 35% through automated data consolidation and variance models.
+- Previous Corporate Role: Sales Support Analyst — Showmax 2.0 at MultiChoice Group (2024 – 2025). Contributed to a 135% surge in subscription activations and reduced weekly report delivery times by 20%.
+- Volunteering & Social Impact:
+  1. GamblePause Africa (Analyst & Psychologist, 2023 – Present): Active across 3 African countries (Nigeria, Kenya, Ghana) and expanding. Surveyed 420 youth/students on gambling harm (71.1% participation, 40.6% academic disruption) and provide direct psychological counseling to clients.
+  2. Lagos Division Ambassador (Data & Community Volunteer, 2023 – Present): Volunteer supporting the Lagos Division Ambassador initiative across Lagos State—facilitating youth empowerment, community mobilization, and regional data tracking (an independent initiative distinct from Cowrywise).
+  3. NOUN Cowrywise Ambassador (Data Team Lead & Career Team Lead, 2023 – Present): Directed data and career tracks at the National Open University of Nigeria and led "The Cowrywise Bootcamp Experience" with 200+ participants.
+- Tools & Skills: SQL, Power BI, Advanced Excel (Power Query, DAX, Variance Modeling), Looker Studio, Google Workspace (Sheets, Docs, Slides, Drive), Google Apps Script, Notion, Prompt Engineering, and modern AI tools (ChatGPT, Claude, Gemini).
+- Certifications: Data Analysis & Visualisation (AI NOW BootCamp 2026), Data Analyst Associate (DataCamp), SQL Associate (DataCamp), AI Fundamentals (DataCamp), Intro to Data Science (Kibo School), AI Augmented Professional (ALX).
+- Education: BSc in Business Administration (In Progress, Expected 2027) — National Open University of Nigeria; ND in Business Administration — Lagos State Polytechnic.
 `;
 
 // Health check endpoint
@@ -119,31 +75,165 @@ app.get("/api/health", (_req, res) => {
   res.json({ status: "ok", timestamp: new Date().toISOString() });
 });
 
-// Helper for local grounded fallback when API key is rate-limited or missing
+// Helper for local first-person grounded response (instant speed)
 function getGroundedLocalResponse(query: string): string {
-  const q = query.toLowerCase();
-  if (q.includes("power bi") || q.includes("bi") || q.includes("dashboard")) {
-    return `Abiodun is highly proficient in **Power BI**, Excel, and SQL for executive dashboard development. He has engineered enterprise reporting solutions such as the **Showmax 2.0 Commercial Intelligence Dashboard** (which helped drive a 135% subscription surge and cut weekly report delivery by 20%) and the **Executive KPI & Variance Suite** (which reduced management reporting turnaround by 35%).`;
+  const q = query.toLowerCase().trim();
+
+  // Direct Name & Identity Questions
+  if (
+    q === "what is your name" ||
+    q === "what's your name" ||
+    q === "what is your name?" ||
+    q === "what's your name?" ||
+    q.includes("your name") ||
+    q === "who are you" ||
+    q === "who are you?"
+  ) {
+    return "My name is Abiodun Ayodeji. I'm a Data Analyst and Performance & Planning Analyst based in Lagos, Nigeria. How can I help you today?";
   }
+
+  // Greetings
+  if (
+    q === "hi" ||
+    q === "hello" ||
+    q === "hey" ||
+    q === "good morning" ||
+    q === "good afternoon" ||
+    q === "good evening" ||
+    q === "hello!" ||
+    q === "hi there"
+  ) {
+    return "Hello! I'm Abiodun Ayodeji. Great to connect with you. What would you like to know about my background, analytics projects, or experience?";
+  }
+
+  // Location & Nigeria
+  if (
+    q.includes("where do you live") ||
+    q.includes("location") ||
+    q.includes("where are you based") ||
+    q.includes("where are you located") ||
+    q === "nigeria" ||
+    q.includes("in nigeria") ||
+    q.includes("live in nigeria")
+  ) {
+    return "I live in **Lagos, Nigeria**! 🇳🇬 I love the vibrant energy, industrious spirit, and cultural warmth of Nigeria. From here in Lagos, I work on high-impact analytics projects and collaborate with organizations and teams globally.";
+  }
+
+  // Reading & Books
+  if (
+    q.includes("reading") ||
+    q.includes("book") ||
+    q.includes("read") ||
+    q.includes("literature") ||
+    q.includes("author")
+  ) {
+    return "I **love reading**! 📚 Reading is one of my greatest passions and a daily ritual. I read widely across leadership, personal development, theology & Christian literature, psychology, data thinking, and biographies.\n\nBooks sharpen my analytical thinking, nurture wisdom, and expand my perspective on people and systems. If you have any favorite book recommendations in personal growth, leadership, or analytics, I'd love to hear them!";
+  }
+
+  // Faith & Christianity
+  if (
+    q.includes("christian") ||
+    q.includes("faith") ||
+    q.includes("religion") ||
+    q.includes("god") ||
+    q.includes("church") ||
+    q.includes("spiritual") ||
+    q.includes("belief")
+  ) {
+    return "Yes, I am a **devoted Christian**! 🙏 My faith in God is the central anchor of my life. It defines my character, inspires my moral compass, and instills core values of integrity, humility, stewardship, purpose, and kindness in everything I do—both in life and in my professional work.";
+  }
+
+  // Nature & Outdoors
+  if (
+    q.includes("nature") ||
+    q.includes("outdoor") ||
+    q.includes("scenery") ||
+    q.includes("landscape") ||
+    q.includes("greenery")
+  ) {
+    return "I **deeply love nature**! 🌿 Whenever I need to reflect, recharge, or reset away from computer screens and datasets, I enjoy peaceful walks outdoors, admiring scenic natural landscapes, listening to the calm breeze, and soaking in the beauty of creation. Nature keeps me grounded, clear-headed, and inspired.";
+  }
+
+  // Travelling & Exploration
+  if (
+    q.includes("travel") ||
+    q.includes("travelling") ||
+    q.includes("trip") ||
+    q.includes("vacation") ||
+    q.includes("explore") ||
+    q.includes("places") ||
+    q.includes("cities")
+  ) {
+    return "I **love travelling**! ✈️ Exploring new environments, experiencing different cultures and traditions, tasting regional cuisines, and connecting with people from diverse backgrounds is one of my favorite adventures. Travelling broadens my worldview and teaches lessons that go far beyond books and screens.";
+  }
+
+  // Fun, Hobbies & Outside of Work
+  if (
+    q.includes("fun") ||
+    q.includes("hobby") ||
+    q.includes("hobbies") ||
+    q.includes("free time") ||
+    q.includes("outside work") ||
+    q.includes("outside of work") ||
+    q.includes("spare time") ||
+    q.includes("passions") ||
+    q.includes("personality")
+  ) {
+    return "Outside of data analytics, SQL pipelines, and Power BI dashboards, I love having fun and staying inspired! ✨\n\n• 📚 **Reading**: Voracious reader of leadership, theology, psychology, and personal growth books.\n• 🙏 **Faith**: Devoted Christian, active in community and spiritual fellowship.\n• 🌿 **Nature**: Taking quiet walks outdoors and enjoying scenic landscapes.\n• ✈️ **Travelling**: Exploring new cities, road trips, and learning about diverse cultures.\n• 🎵 **Music & Life**: Listening to uplifting gospel and inspirational music, and having meaningful conversations about purpose.\n• 🤝 **Volunteering**: Mentoring students and contributing to community initiatives across Lagos.";
+  }
+
+  // Lagos Division Ambassador clarification
+  if (q.includes("lagos division") || (q.includes("ambassador") && !q.includes("cowrywise"))) {
+    return "I volunteer for the **Lagos Division Ambassador** initiative across Lagos State, supporting youth empowerment programs, civic mobilization, and regional data tracking. Please note this is an independent civic initiative, separate and distinct from Cowrywise.";
+  }
+
+  // Cowrywise
+  if (q.includes("cowrywise") || q.includes("bootcamp")) {
+    return "As a **NOUN Cowrywise Ambassador**, I served as both Data Team Lead and Career Team Lead. I spearheaded 'The Cowrywise Bootcamp Experience'—an intensive 4-day career and analytics program for over 200 participants at the National Open University of Nigeria.";
+  }
+
+  // Phone, WhatsApp, Contact & Direct Communication
+  if (
+    q.includes("phone") ||
+    q.includes("call") ||
+    q.includes("mobile") ||
+    q.includes("number") ||
+    q.includes("whatsapp") ||
+    q.includes("reach") ||
+    q.includes("contact") ||
+    q.includes("email")
+  ) {
+    return `You can reach me directly via:\n\n• **Direct Phone / WhatsApp**: **07054195682** (International: **+234 705 419 5682**)\n• **Official Email**: **ayodejiharbiodun24@gmail.com**\n• **LinkedIn**: [linkedin.com/in/abiodun-ayodeji24](https://www.linkedin.com/in/abiodun-ayodeji24)\n• **GitHub**: [github.com/harbiodunjay24](https://github.com/harbiodunjay24)\n\nFeel free to call me or send a message on WhatsApp or email!`;
+  }
+
+  if (q.includes("hire") || q.includes("available") || q.includes("opportunity") || q.includes("role") || q.includes("interview")) {
+    return `I am **immediately available** for full-time roles, contract engagements, and analytics consulting across Data Analysis, Performance & Planning, and Business Intelligence.\n\nYou can contact me directly at **07054195682** or email me at **ayodejiharbiodun24@gmail.com**.`;
+  }
+
+  if (q.includes("power bi") || q.includes("dashboard")) {
+    return `I build enterprise dashboards in **Power BI**, Excel, and SQL. Two key deliverables from my portfolio:\n• **Showmax 2.0 Commercial Dashboard**: Sped up weekly reporting by 20% and helped drive a 135% subscription sales surge.\n• **Executive KPI & Variance Suite**: Cut executive reporting turnaround time by 35% with automated alerts.`;
+  }
+
   if (q.includes("sql") || q.includes("database") || q.includes("query")) {
-    return `Abiodun holds the **SQL Associate Certification from DataCamp** and routinely writes advanced SQL queries (including CTEs, multi-table joins, and window aggregations) to extract, transform, and reconcile large transactional datasets at **MultiChoice Group**.`;
+    return `I hold the **SQL Associate Certification from DataCamp** and routinely write complex queries—CTEs, joins, subqueries, and window functions—to audit and reconcile large transactional datasets at MultiChoice Group.`;
   }
-  if (q.includes("gamble") || q.includes("psycholog") || q.includes("volunteer") || q.includes("impact")) {
-    return `Abiodun serves dual roles at **GamblePause Africa**—an organization currently operating across 3 African countries and expanding. As an **Analyst**, he conducted empirical research surveying 420 youth respondents, uncovering a 71.1% participation rate and 40.6% academic disruption. As a **Psychologist**, he works directly with clients dealing with gambling issues, providing counseling and recovery support. He also leads the Data and Career teams as a **NOUN Cowrywise Ambassador**, where he organized a 4-day career bootcamp with over 200 participants.`;
+
+  if (q.includes("gamble") || q.includes("psycholog")) {
+    return `At **GamblePause Africa** (operating across Nigeria, Kenya, and Ghana), I serve dual roles:\n• **Analyst**: Led research across 420 youth respondents, identifying a 71.1% gambling participation rate.\n• **Psychologist**: Provide frontline counseling and rehabilitation support for clients dealing with gambling harm.`;
   }
+
   if (q.includes("multichoice") || q.includes("experience") || q.includes("career") || q.includes("work")) {
-    return `Abiodun has over 5 years of multidisciplinary experience, primarily within **MultiChoice Group**:\n- **Performance & Planning Analyst (2025–Present)**: Automated KPI frameworks, cutting executive reporting turnaround by 35%.\n- **Sales Support Analyst — Showmax 2.0 (2024–2025)**: Supported a 135% sales increase and cut weekly reporting turnaround by 20%.\n- **Project Management Trainee (2022–2024)** at MultiChoice.\n- **Customer Service Representative (2020–2022)** at MultiChoice.`;
+    return `I have over 5 years of verified multidisciplinary experience at **MultiChoice Group**:\n• **Performance & Planning Analyst (2025–Present)**: Cut executive reporting cycle by 35% via automated pipelines.\n• **Sales Support Analyst — Showmax 2.0 (2024–2025)**: Supported a 135% subscription surge and cut weekly report delivery by 20%.\n• **Project Management Trainee (2022–2024)**.\n• **Customer Service Representative (2020–2022)**.`;
   }
+
   if (q.includes("certif") || q.includes("education") || q.includes("degree")) {
-    return `Abiodun holds multiple recognized credentials:\n- **Data Analysis and Visualisation Training in the AI NOW BootCamp 2026** (Incubator / AI NOW BootCamp)\n- **Data Analyst Associate** (DataCamp)\n- **SQL Associate** (DataCamp)\n- **AI Fundamentals** (DataCamp)\n- **Introduction to Data Science** (Kibo School)\n- **AI Augmented Professional** (ALX)\n\nHe is pursuing a **BSc in Business Administration** at the National Open University of Nigeria (Expected 2027) and holds an ND from Lagos State Polytechnic.`;
+    return `My verified credentials include:\n• **Data Analysis and Visualisation Training in the AI NOW BootCamp 2026**\n• **Data Analyst Associate** (DataCamp)\n• **SQL Associate** (DataCamp)\n• **AI Fundamentals** (DataCamp)\n• **Introduction to Data Science** (Kibo School)\n• **AI Augmented Professional** (ALX)\n\nI am completing my **BSc in Business Administration** at the National Open University of Nigeria (Expected 2027) and hold an ND in Business Administration from Lagos State Polytechnic.`;
   }
-  if (q.includes("phone") || q.includes("contact") || q.includes("email")) {
-    return `You can reach Abiodun Ayodeji directly via:\n- **Email**: ayodejiharbiodun24@gmail.com\n- **Phone**: 07054195682\n- **Location**: Lagos, Nigeria\n- **LinkedIn**: linkedin.com/in/abiodun-ayodeji`;
-  }
-  return `Abiodun Ayodeji is a **Data Analyst | Performance & Planning Analyst** with 5+ years of experience transforming complex datasets into actionable business intelligence at MultiChoice Group. His verified track record includes cutting reporting turnaround times by 35%, supporting a 135% sales increase during the Showmax 2.0 relaunch, and driving empirical research and psychological counseling for GamblePause Africa across 3 countries. You can connect directly via email at ayodejiharbiodun24@gmail.com or phone at 07054195682.`;
+
+  return `I'm Abiodun Ayodeji, a **Data Analyst | Performance & Planning Analyst** with 5+ years of experience transforming complex datasets into actionable business intelligence at MultiChoice Group. My achievements include cutting reporting turnaround times by 35%, supporting a 135% sales increase during the Showmax 2.0 relaunch, and driving empirical research and psychological counseling for GamblePause Africa.\n\nFeel free to ask me any specific question about my background, skills, or projects, or call me directly at **07054195682**!`;
 }
 
-// Ask Abiodun AI Assistant Endpoint
+// Ask Abiodun AI Assistant Endpoint (Super responsive & first-person)
 app.post("/api/gemini/ask-abiodun", async (req, res) => {
   try {
     const message = req.body.message || req.body.question || "";
@@ -151,6 +241,43 @@ app.post("/api/gemini/ask-abiodun", async (req, res) => {
 
     if (!message || typeof message !== "string" || !message.trim()) {
       return res.status(400).json({ error: "Message is required." });
+    }
+
+    const trimmed = message.trim().toLowerCase();
+
+    // Instant fast-path for simple identity, greetings, and contact questions
+    if (
+      trimmed === "what is your name" ||
+      trimmed === "what is your name?" ||
+      trimmed === "what's your name" ||
+      trimmed === "what's your name?" ||
+      trimmed === "who are you" ||
+      trimmed === "who are you?" ||
+      trimmed === "hi" ||
+      trimmed === "hello" ||
+      trimmed === "hey" ||
+      trimmed === "good morning" ||
+      trimmed === "good afternoon" ||
+      trimmed === "phone" ||
+      trimmed === "what is your phone number" ||
+      trimmed === "what is your phone number?" ||
+      trimmed === "contact" ||
+      trimmed === "do you love reading?" ||
+      trimmed === "do you love reading" ||
+      trimmed === "tell me about your faith as a christian" ||
+      trimmed === "what do you love about nature?" ||
+      trimmed === "what do you love about nature" ||
+      trimmed === "where do you love travelling?" ||
+      trimmed === "where do you love travelling" ||
+      trimmed === "what is it like living in nigeria?" ||
+      trimmed === "what is it like living in nigeria" ||
+      trimmed === "what do you do for fun outside of work?" ||
+      trimmed === "what do you do for fun outside of work" ||
+      trimmed === "what do you do for fun" ||
+      trimmed === "what do you do for fun?"
+    ) {
+      const instantReply = getGroundedLocalResponse(message);
+      return res.json({ reply: instantReply, answer: instantReply });
     }
 
     // Check if Gemini API key exists
@@ -162,11 +289,10 @@ app.post("/api/gemini/ask-abiodun", async (req, res) => {
     try {
       const ai = getGeminiClient();
 
-      // Format chat prompt with knowledge base and context
       const historyText = Array.isArray(conversationHistory)
         ? conversationHistory
-            .slice(-6)
-            .map((m: { role: string; text?: string; content?: string }) => `${m.role === "user" ? "Recruiter/Visitor" : "Assistant"}: ${m.text || m.content || ""}`)
+            .slice(-4)
+            .map((m: { role: string; text?: string; content?: string }) => `${m.role === "user" ? "Visitor" : "Abiodun"}: ${m.text || m.content || ""}`)
             .join("\n\n")
         : "";
 
@@ -175,20 +301,26 @@ app.post("/api/gemini/ask-abiodun", async (req, res) => {
 CONVERSATION HISTORY:
 ${historyText || "No previous messages."}
 
-CURRENT VISITOR/RECRUITER QUESTION:
+CURRENT VISITOR QUESTION:
 ${message}
 
-Please provide a well-crafted, accurate, and concise answer directly addressing the question while highlighting Abiodun's real strengths and verified achievements:`;
+INSTRUCTION: Respond directly as Abiodun Ayodeji in the FIRST PERSON ("I", "my", "me"). Answer specifically and concisely to what was asked:`;
 
-      const response = await ai.models.generateContent({
+      // Use a timeout promise to ensure quick response (max 3.5s)
+      const timeoutPromise = new Promise((_, reject) =>
+        setTimeout(() => reject(new Error("Gemini timeout")), 3500)
+      );
+
+      const generatePromise = ai.models.generateContent({
         model: "gemini-2.5-flash",
         contents: fullPrompt,
       });
 
+      const response: any = await Promise.race([generatePromise, timeoutPromise]);
       const reply = response.text || getGroundedLocalResponse(message);
       res.json({ reply, answer: reply });
     } catch (genError: any) {
-      console.warn("Gemini generation warning, using grounded local knowledge:", genError?.message);
+      console.warn("Fast fallback to grounded local response:", genError?.message);
       const fallback = getGroundedLocalResponse(message);
       res.json({ reply: fallback, answer: fallback });
     }
@@ -232,7 +364,7 @@ INSTRUCTIONS:
 4. Format in clean, elegant Markdown.`;
 
     const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash",
+      model: "gemini-3.8-flash",
       contents: prompt,
     });
 
@@ -248,14 +380,80 @@ INSTRUCTIONS:
   }
 });
 
-// Contact message endpoint
+// Contact Inquiries Storage for Administrator Dashboard
+interface ContactInquiry {
+  id: string;
+  name: string;
+  email: string;
+  subject: string;
+  message: string;
+  timestamp: string;
+}
+
+const contactInquiries: ContactInquiry[] = [
+  {
+    id: "inq-welcome",
+    name: "System Notification",
+    email: "portfolio@ayodeji.data",
+    subject: "Welcome Abiodun",
+    message: "Your portfolio contact portal is active. Any messages sent by recruiters or visitors will be directed to ayodejiharbiodun24@gmail.com and logged here.",
+    timestamp: new Date().toISOString(),
+  },
+];
+
+// Contact message endpoint - directs to ayodejiharbiodun24@gmail.com
 app.post("/api/contact", (req, res) => {
   const { name, email, subject, message } = req.body;
-  console.log(`[Contact Form Received] From: ${name} <${email}> | Subject: ${subject}`);
+  const targetEmail = "ayodejiharbiodun24@gmail.com";
+
+  if (!name || !email || !message) {
+    return res.status(400).json({ error: "Name, email, and message are required." });
+  }
+
+  const newInquiry: ContactInquiry = {
+    id: `inq-${Date.now()}`,
+    name: String(name).trim(),
+    email: String(email).trim(),
+    subject: String(subject || "Portfolio Contact Inquiry").trim(),
+    message: String(message).trim(),
+    timestamp: new Date().toISOString(),
+  };
+
+  contactInquiries.unshift(newInquiry);
+  console.log(`[Contact Form Received] From: ${newInquiry.name} <${newInquiry.email}> | Subject: ${newInquiry.subject}`);
+
+  const encodedSubject = encodeURIComponent(`Portfolio Inquiry from ${newInquiry.name}: ${newInquiry.subject}`);
+  const encodedBody = encodeURIComponent(
+    `Hello Abiodun,\n\n${newInquiry.message}\n\n---\nSender Name: ${newInquiry.name}\nSender Email: ${newInquiry.email}\nPhone/Contact: (Provided via portfolio form)\nDate: ${new Date().toLocaleString()}`
+  );
+
+  const mailtoLink = `mailto:${targetEmail}?subject=${encodedSubject}&body=${encodedBody}`;
+  const gmailLink = `https://mail.google.com/mail/?view=cm&fs=1&to=${targetEmail}&su=${encodedSubject}&body=${encodedBody}`;
+
   res.json({
     success: true,
-    message: "Thank you for reaching out! Abiodun will get back to you shortly.",
+    message: `Thank you, ${newInquiry.name}! Your message has been logged and directed to Abiodun Ayodeji (${targetEmail}).`,
+    targetEmail,
+    mailtoLink,
+    gmailLink,
+    inquiry: newInquiry,
   });
+});
+
+// Admin endpoint to view received inquiries
+app.get("/api/inquiries", (_req, res) => {
+  res.json({ inquiries: contactInquiries });
+});
+
+// Admin endpoint to delete an inquiry
+app.delete("/api/inquiries/:id", (req, res) => {
+  const { id } = req.params;
+  const index = contactInquiries.findIndex((item) => item.id === id);
+  if (index !== -1) {
+    contactInquiries.splice(index, 1);
+    return res.json({ success: true, message: "Inquiry removed." });
+  }
+  res.status(404).json({ error: "Inquiry not found." });
 });
 
 // Vite middleware setup

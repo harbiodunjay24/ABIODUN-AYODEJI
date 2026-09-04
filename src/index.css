@@ -33,3 +33,58 @@
 ::-webkit-scrollbar-thumb:hover {
   background: #A1A1AA;
 }
+
+/* Dedicated Print Stylesheet: Prevents 17-page full website prints */
+@media print {
+  @page {
+    margin: 12mm;
+    size: A4 portrait;
+  }
+
+  body {
+    background: white !important;
+    color: black !important;
+    font-size: 10pt !important;
+  }
+
+  /* Hide all background app sections during print */
+  #main-navbar,
+  #hero,
+  #experience,
+  #projects,
+  #skills,
+  #volunteering,
+  #documents,
+  #contact,
+  #ask-ai,
+  #main-footer,
+  #admin-top-bar,
+  #admin-preview-bar,
+  button,
+  .no-print {
+    display: none !important;
+  }
+
+  /* Ensure cv modal behaves as a clean printed document */
+  #cv-modal-backdrop {
+    position: static !important;
+    padding: 0 !important;
+    background: transparent !important;
+    backdrop-filter: none !important;
+  }
+
+  #cv-modal-container {
+    max-width: 100% !important;
+    max-height: none !important;
+    box-shadow: none !important;
+    border: none !important;
+    overflow: visible !important;
+  }
+
+  #cv-printable-content {
+    overflow: visible !important;
+    max-height: none !important;
+    padding: 0 !important;
+  }
+}
+

@@ -53,7 +53,7 @@ export const About: React.FC = () => {
               I am also vast in contemporary <strong className="text-zinc-900 font-semibold">AI tooling</strong>—leveraging prompt engineering and AI-assisted workflows to accelerate ETL cycles and produce intelligent reporting dashboards.
             </p>
             <p className="text-zinc-600">
-              Beyond commercial enterprise systems, I am passionate about social impact. I serve as both an Analyst and a Psychologist for <strong className="text-zinc-900">GamblePause Africa</strong> (currently active in 3 countries and expanding), conducting research and counseling clients, and I lead data and career initiatives as a <strong className="text-zinc-900">NOUN Cowrywise Ambassador</strong>.
+              Beyond commercial enterprise systems, I am passionate about social impact. I serve as both an Analyst and a Psychologist for <strong className="text-zinc-900">GamblePause Africa</strong> (currently active in 3 countries and expanding), volunteer for the <strong className="text-zinc-900">Lagos Division Ambassador</strong> initiative across Lagos State, and lead data and career initiatives as a <strong className="text-zinc-900">NOUN Cowrywise Ambassador</strong>.
             </p>
 
             <div className="pt-3 flex flex-wrap gap-2 text-xs">

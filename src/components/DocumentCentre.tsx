@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { usePortfolio } from '../context/PortfolioContext';
 import { DocumentItem } from '../types';
+import { generateDocumentPdf, generateCvPdf } from '../utils/pdfGenerator';
 import {
   FileText,
   Search,
@@ -61,20 +62,26 @@ export const DocumentCentre: React.FC<DocumentCentreProps> = ({
   };
 
   const handleDownloadDoc = (doc: DocumentItem) => {
-    if (doc.fileUrl) {
-      window.open(doc.fileUrl, '_blank');
-      return;
+    try {
+      if (doc.category === 'CV' || doc.id.toLowerCase().includes('cv') || doc.name.toLowerCase().includes('curriculum')) {
+        generateCvPdf(data);
+        return;
+      }
+      // Generate clean professional PDF for the document
+      generateDocumentPdf(doc);
+    } catch (err) {
+      console.error('Error generating document PDF:', err);
+      // Fallback text download if needed
+      const element = document.createElement('a');
+      const file = new Blob([doc.content || `${doc.name}\n\nAbiodun Ayodeji\nData Analyst | Performance & Planning`], {
+        type: 'text/plain;charset=utf-8',
+      });
+      element.href = URL.createObjectURL(file);
+      element.download = doc.fileName || `${doc.name.toLowerCase().replace(/\s+/g, '_')}.txt`;
+      document.body.appendChild(element);
+      element.click();
+      document.body.removeChild(element);
     }
-    // Generate text/markdown file download
-    const element = document.createElement('a');
-    const file = new Blob([doc.content || `${doc.name}\n\nAbiodun Ayodeji\nData Analyst | Performance & Planning`], {
-      type: 'text/plain;charset=utf-8',
-    });
-    element.href = URL.createObjectURL(file);
-    element.download = doc.fileName || `${doc.name.toLowerCase().replace(/\s+/g, '_')}.txt`;
-    document.body.appendChild(element);
-    element.click();
-    document.body.removeChild(element);
   };
 
   return (

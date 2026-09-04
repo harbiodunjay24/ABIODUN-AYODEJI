@@ -9,6 +9,7 @@ import {
   CheckCircle2,
   Copy,
   Check,
+  ExternalLink,
 } from 'lucide-react';
 
 interface ContactSectionProps {
@@ -28,6 +29,7 @@ export const ContactSection: React.FC<ContactSectionProps> = () => {
 
   const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
   const [responseMsg, setResponseMsg] = useState('');
+  const [activeMailLinks, setActiveMailLinks] = useState<{ mailto: string; gmail: string } | null>(null);
   const [copiedEmail, setCopiedEmail] = useState(false);
   const [copiedPhone, setCopiedPhone] = useState(false);
 
@@ -58,17 +60,27 @@ export const ContactSection: React.FC<ContactSectionProps> = () => {
         throw new Error(json.error || 'Failed to dispatch message');
       }
 
+      // Generate direct email client links
+      const encodedSubject = encodeURIComponent(`Portfolio Inquiry from ${formData.name}: ${formData.subject}`);
+      const encodedBody = encodeURIComponent(
+        `Hello Abiodun,\n\n${formData.message}\n\n---\nFrom: ${formData.name}\nEmail: ${formData.email}\nDate: ${new Date().toLocaleString()}`
+      );
+      const mailto = `mailto:${profile.email || 'ayodejiharbiodun24@gmail.com'}?subject=${encodedSubject}&body=${encodedBody}`;
+      const gmail = `https://mail.google.com/mail/?view=cm&fs=1&to=${profile.email || 'ayodejiharbiodun24@gmail.com'}&su=${encodedSubject}&body=${encodedBody}`;
+
+      setActiveMailLinks({ mailto, gmail });
       setStatus('success');
-      setResponseMsg(json.message || 'Thank you. Your message has been sent successfully.');
-      setFormData({
-        name: '',
-        email: '',
-        subject: 'Job Opportunity',
-        message: '',
-      });
+      setResponseMsg(json.message || `Your message is addressed to Abiodun Ayodeji (${profile.email || 'ayodejiharbiodun24@gmail.com'}).`);
+
+      // Attempt immediate mail client launch
+      try {
+        window.location.href = mailto;
+      } catch (e) {
+        // Fallback handled by buttons in UI
+      }
     } catch (err: any) {
       setStatus('error');
-      setResponseMsg(err.message || 'Message noted. Please also feel free to email directly.');
+      setResponseMsg(err.message || 'Message noted. Please feel free to email Abiodun directly.');
     }
   };
 
@@ -176,15 +188,30 @@ export const ContactSection: React.FC<ContactSectionProps> = () => {
                   <div>
                     <div className="text-[11px] text-zinc-500">LinkedIn Profile</div>
                     <a
-                      href={profile.linkedinUrl}
+                      href={profile.socialLinks?.linkedin || profile.linkedinUrl || 'https://www.linkedin.com/in/abiodun-ayodeji24'}
                       target="_blank"
-                      rel="noreferrer"
+                      rel="noopener noreferrer"
                       className="text-xs sm:text-sm font-semibold text-zinc-900 hover:underline"
                     >
-                      linkedin.com/in/abiodun-ayodeji
+                      linkedin.com/in/abiodun-ayodeji24
                     </a>
                   </div>
                 </div>
+              </div>
+
+              {/* Direct Personal Email Compose Button */}
+              <div className="pt-4 border-t border-zinc-200">
+                <a
+                  href={`mailto:${profile.email || 'ayodejiharbiodun24@gmail.com'}?subject=Personal%20Inquiry%20for%20Abiodun`}
+                  className="w-full bg-zinc-900 hover:bg-black text-white py-2.5 px-4 rounded-lg text-xs font-medium flex items-center justify-center gap-2 transition-colors shadow-xs"
+                >
+                  <Mail className="w-3.5 h-3.5" />
+                  <span>Email Abiodun Directly</span>
+                  <ExternalLink className="w-3 h-3 text-zinc-400" />
+                </a>
+                <p className="text-[11px] text-zinc-500 text-center mt-2">
+                  Opens your email client directly addressed to <span className="font-medium text-zinc-700">{profile.email}</span>
+                </p>
               </div>
             </div>
           </div>
@@ -192,24 +219,64 @@ export const ContactSection: React.FC<ContactSectionProps> = () => {
           {/* Right Column: Clean Contact Form */}
           <div className="lg:col-span-7">
             <div className="bg-[#FAFAFA] border border-zinc-200 rounded-xl p-6 sm:p-8 shadow-xs">
-              <h3 className="text-base font-semibold text-zinc-900 mb-1">
-                Send a Direct Message
-              </h3>
+              <div className="flex items-center justify-between mb-1">
+                <h3 className="text-base font-semibold text-zinc-900">
+                  Send a Direct Message
+                </h3>
+                <span className="text-[11px] font-medium text-zinc-500 bg-zinc-200/70 px-2 py-0.5 rounded">
+                  Direct to Email
+                </span>
+              </div>
               <p className="text-xs text-zinc-600 mb-6">
-                Fill in the details below and I'll get back to you promptly.
+                Your message is sent directly to Abiodun Ayodeji at <span className="font-semibold text-zinc-800">{profile.email || 'ayodejiharbiodun24@gmail.com'}</span>.
               </p>
 
               {status === 'success' ? (
-                <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-5 text-center space-y-2">
-                  <CheckCircle2 className="w-8 h-8 text-emerald-600 mx-auto" />
-                  <div className="text-sm font-semibold text-emerald-900">Message Delivered</div>
-                  <p className="text-xs text-emerald-700">{responseMsg}</p>
-                  <button
-                    onClick={() => setStatus('idle')}
-                    className="mt-3 text-xs font-semibold text-emerald-800 hover:underline"
-                  >
-                    Send another message
-                  </button>
+                <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-6 text-center space-y-4">
+                  <CheckCircle2 className="w-10 h-10 text-emerald-600 mx-auto" />
+                  <div>
+                    <div className="text-sm font-semibold text-emerald-900">Message Ready for Abiodun</div>
+                    <p className="text-xs text-emerald-700 mt-1 max-w-md mx-auto">{responseMsg}</p>
+                  </div>
+
+                  {activeMailLinks && (
+                    <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
+                      <a
+                        href={activeMailLinks.gmail}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="w-full sm:w-auto bg-emerald-700 hover:bg-emerald-800 text-white px-4 py-2 rounded-lg text-xs font-medium flex items-center justify-center gap-1.5 shadow-xs transition-colors"
+                      >
+                        <Mail className="w-3.5 h-3.5" />
+                        <span>Send via Web Gmail</span>
+                      </a>
+
+                      <a
+                        href={activeMailLinks.mailto}
+                        className="w-full sm:w-auto bg-white hover:bg-zinc-100 text-zinc-800 border border-zinc-300 px-4 py-2 rounded-lg text-xs font-medium flex items-center justify-center gap-1.5 transition-colors"
+                      >
+                        <ExternalLink className="w-3.5 h-3.5 text-zinc-500" />
+                        <span>Open in Email App</span>
+                      </a>
+                    </div>
+                  )}
+
+                  <div className="pt-3 border-t border-emerald-200/70">
+                    <button
+                      onClick={() => {
+                        setStatus('idle');
+                        setFormData({
+                          name: '',
+                          email: '',
+                          subject: 'Job Opportunity',
+                          message: '',
+                        });
+                      }}
+                      className="text-xs font-semibold text-emerald-800 hover:underline"
+                    >
+                      Send another message
+                    </button>
+                  </div>
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-4 text-xs sm:text-sm">
@@ -282,10 +349,11 @@ export const ContactSection: React.FC<ContactSectionProps> = () => {
                   <button
                     type="submit"
                     disabled={status === 'submitting'}
-                    className="bg-zinc-900 hover:bg-black disabled:bg-zinc-300 text-white px-5 py-2.5 rounded-md text-xs font-medium flex items-center gap-2 transition-colors shadow-xs"
+                    className="w-full sm:w-auto bg-zinc-900 hover:bg-black disabled:bg-zinc-300 text-white px-6 py-2.5 rounded-md text-xs font-medium flex items-center justify-center gap-2 transition-colors shadow-xs"
                   >
-                    <span>{status === 'submitting' ? 'Sending Message...' : 'Send Message'}</span>
-                    <Send className="w-3.5 h-3.5" />
+                    <Mail className="w-3.5 h-3.5" />
+                    <span>{status === 'submitting' ? 'Delivering to Email...' : "Send Message to Abiodun's Email"}</span>
+                    <Send className="w-3.5 h-3.5 opacity-70" />
                   </button>
                 </form>
               )}
