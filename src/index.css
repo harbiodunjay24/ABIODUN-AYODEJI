@@ -34,20 +34,76 @@
   background: #A1A1AA;
 }
 
-/* Dedicated Print Stylesheet: Prevents 17-page full website prints */
+/* Dedicated Print Stylesheet: Ensures clean, executive A4 document prints */
+.no-screen {
+  display: none !important;
+}
+
 @media print {
   @page {
-    margin: 12mm;
+    margin: 12mm 14mm 18mm 14mm;
     size: A4 portrait;
   }
 
-  body {
-    background: white !important;
-    color: black !important;
-    font-size: 10pt !important;
+  *,
+  *::before,
+  *::after {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
   }
 
-  /* Hide all background app sections during print */
+  html,
+  body {
+    background: #ffffff !important;
+    color: #0f172a !important;
+    font-size: 9.5pt !important;
+    line-height: 1.4 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+  }
+
+  /* Show print-only corporate running metadata */
+  .no-screen {
+    display: flex !important;
+  }
+
+  .cv-print-running-footer {
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    height: 10mm !important;
+    border-top: 1px solid #cbd5e1 !important;
+    padding-top: 2mm !important;
+    padding-left: 1mm !important;
+    padding-right: 1mm !important;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace !important;
+    font-size: 7.2pt !important;
+    color: #64748b !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    background: #ffffff !important;
+    z-index: 99999 !important;
+    line-height: 1.2 !important;
+  }
+
+  .cv-print-badge {
+    display: inline-block !important;
+    background: #f1f5f9 !important;
+    color: #0f172a !important;
+    font-weight: 700 !important;
+    padding: 1.5px 4.5px !important;
+    border: 1px solid #94a3b8 !important;
+    border-radius: 2px !important;
+    letter-spacing: 0.08em !important;
+    font-size: 6.5pt !important;
+    text-transform: uppercase !important;
+    margin-right: 5px !important;
+  }
+
+  /* Hide all non-document UI components during print */
   #main-navbar,
   #hero,
   #experience,
@@ -60,31 +116,75 @@
   #main-footer,
   #admin-top-bar,
   #admin-preview-bar,
+  #cv-modal-toolbar,
+  #cv-print-toast,
+  #photo-modal,
+  #admin-modal,
   button,
   .no-print {
     display: none !important;
   }
 
-  /* Ensure cv modal behaves as a clean printed document */
+  /* Reset modal overlay to act as a native document page */
   #cv-modal-backdrop {
     position: static !important;
+    inset: auto !important;
     padding: 0 !important;
-    background: transparent !important;
+    margin: 0 !important;
+    background: #ffffff !important;
     backdrop-filter: none !important;
+    overflow: visible !important;
+    display: block !important;
   }
 
   #cv-modal-container {
+    position: static !important;
     max-width: 100% !important;
+    width: 100% !important;
     max-height: none !important;
+    height: auto !important;
     box-shadow: none !important;
     border: none !important;
+    border-radius: 0 !important;
     overflow: visible !important;
+    background: #ffffff !important;
   }
 
   #cv-printable-content {
     overflow: visible !important;
     max-height: none !important;
+    padding: 0 0 12mm 0 !important;
+    margin: 0 !important;
+    width: 100% !important;
+  }
+
+  #cv-paper-print {
+    max-width: 100% !important;
+    margin: 0 !important;
     padding: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+
+  /* Prevent awkward page break splits */
+  .cv-section,
+  .cv-item,
+  .cv-metric-box,
+  .cv-cert-card,
+  .cv-avoid-break {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+
+  .cv-section-title {
+    break-after: avoid !important;
+    page-break-after: avoid !important;
+  }
+
+  /* Clean print typography & links */
+  a {
+    color: inherit !important;
+    text-decoration: none !important;
   }
 }
 

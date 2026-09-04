@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { usePortfolio } from '../context/PortfolioContext';
 import { DocumentItem } from '../types';
-import { generateDocumentPdf, generateCvPdf } from '../utils/pdfGenerator';
+import { generateDocumentPdf, generateCvPdf, generateResumePdf } from '../utils/pdfGenerator';
 import {
   FileText,
   Search,
@@ -63,11 +63,15 @@ export const DocumentCentre: React.FC<DocumentCentreProps> = ({
 
   const handleDownloadDoc = (doc: DocumentItem) => {
     try {
+      if (doc.category === 'Resume' || doc.id.toLowerCase().includes('resume') || doc.name.toLowerCase().includes('resume')) {
+        generateResumePdf(data);
+        return;
+      }
       if (doc.category === 'CV' || doc.id.toLowerCase().includes('cv') || doc.name.toLowerCase().includes('curriculum')) {
         generateCvPdf(data);
         return;
       }
-      // Generate clean professional PDF for the document
+      // Generate clean professional PDF for other documents (Cover letter, report, etc.)
       generateDocumentPdf(doc);
     } catch (err) {
       console.error('Error generating document PDF:', err);
